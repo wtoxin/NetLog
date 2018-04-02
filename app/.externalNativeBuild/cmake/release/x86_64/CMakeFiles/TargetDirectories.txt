@@ -1,0 +1,3 @@
+/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/edit_cache.dir
+/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/rebuild_cache.dir
+/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/netguard.dir
