@@ -232,11 +232,6 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                 else
                     popup.getMenu().findItem(R.id.menu_port).setTitle(getString(R.string.title_log_port, port));
 
-                if (!true) {
-                    popup.getMenu().removeItem(R.id.menu_allow);
-                    popup.getMenu().removeItem(R.id.menu_block);
-                }
-
                 final Packet packet = new Packet();
                 packet.version = version;
                 packet.protocol = protocol;
@@ -245,6 +240,9 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                 packet.time = time;
                 packet.uid = uid;
                 packet.allowed = (allowed > 0);
+
+                //dname
+                popup.getMenu().findItem(R.id.menu_copy).setTitle(dname == null ? daddr : dname);
 
                 // Time
                 popup.getMenu().findItem(R.id.menu_time).setTitle(SimpleDateFormat.getDateTimeInstance().format(time));
@@ -261,41 +259,19 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                                 return true;
                             }
 
-                            case R.id.menu_whois:
-                                startActivity(lookupIP);
-                                return true;
-
-                            case R.id.menu_port:
-                                startActivity(lookupPort);
-                                return true;
-
-                            case R.id.menu_allow:
-                                if (IAB.isPurchased(ActivityPro.SKU_FILTER, ActivityLog.this)) {
-                                    DatabaseHelper.getInstance(ActivityLog.this).updateAccess(packet, dname, 0);
-                                    ServiceSinkhole.reload("allow host", ActivityLog.this, false);
-                                    Intent main = new Intent(ActivityLog.this, ActivityMain.class);
-                                    main.putExtra(ActivityMain.EXTRA_SEARCH, Integer.toString(uid));
-                                    startActivity(main);
-                                } else
-                                    startActivity(new Intent(ActivityLog.this, ActivityPro.class));
-                                return true;
-
-                            case R.id.menu_block:
-                                if (IAB.isPurchased(ActivityPro.SKU_FILTER, ActivityLog.this)) {
-                                    DatabaseHelper.getInstance(ActivityLog.this).updateAccess(packet, dname, 1);
-                                    ServiceSinkhole.reload("block host", ActivityLog.this, false);
-                                    Intent main = new Intent(ActivityLog.this, ActivityMain.class);
-                                    main.putExtra(ActivityMain.EXTRA_SEARCH, Integer.toString(uid));
-                                    startActivity(main);
-                                } else
-                                    startActivity(new Intent(ActivityLog.this, ActivityPro.class));
-                                return true;
-
-                            case R.id.menu_copy:
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("netguard", dname == null ? daddr : dname);
-                                clipboard.setPrimaryClip(clip);
-                                return true;
+//                            case R.id.menu_whois:
+//                                startActivity(lookupIP);
+//                                return true;
+//
+//                            case R.id.menu_port:
+//                                startActivity(lookupPort);
+//                                return true;
+//
+//                            case R.id.menu_copy:
+//                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//                                ClipData clip = ClipData.newPlainText("netguard", dname == null ? daddr : dname);
+//                                clipboard.setPrimaryClip(clip);
+//                                return true;
 
                             default:
                                 return false;

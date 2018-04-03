@@ -69,12 +69,9 @@ public class ServiceTileFilter extends TileService implements SharedPreferences.
         Log.i(TAG, "Click");
 
         if (Util.canFilter(this)) {
-            if (IAB.isPurchased(ActivityPro.SKU_FILTER, this)) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-                prefs.edit().putBoolean("filter", !prefs.getBoolean("filter", false)).apply();
-                ServiceSinkhole.reload("tile", this, false);
-            } else
-                startActivity(new Intent(this, ActivityPro.class));
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.edit().putBoolean("filter", !prefs.getBoolean("filter", false)).apply();
+            ServiceSinkhole.reload("tile", this, false);
         } else
             Toast.makeText(this, R.string.msg_unavailable, Toast.LENGTH_SHORT).show();
     }

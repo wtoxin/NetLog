@@ -28,17 +28,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
@@ -47,13 +44,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ImageSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -67,15 +59,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import java.util.List;
 
@@ -95,8 +81,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
     private AlertDialog dialogDoze = null;
     private AlertDialog dialogLegend = null;
     private AlertDialog dialogAbout = null;
-
-    private IAB iab = null;
 
     private static final int REQUEST_VPN = 1;
     private static final int REQUEST_INVITE = 2;
@@ -126,14 +110,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             Log.i(TAG, "SDK=" + Build.VERSION.SDK_INT);
             super.onCreate(savedInstanceState);
             setContentView(R.layout.android);
-            return;
-        }
-
-        // Check for Xposed
-        if (Util.hasXposed(this)) {
-            Log.i(TAG, "Xposed running");
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.xposed);
             return;
         }
 
@@ -305,20 +281,19 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             }
         });
 
-        // Hint usage
-        final LinearLayout llUsage = findViewById(R.id.llUsage);
-        Button btnUsage = findViewById(R.id.btnUsage);
-        boolean hintUsage = prefs.getBoolean("hint_usage", true);
-        llUsage.setVisibility(hintUsage ? View.VISIBLE : View.GONE);
-        btnUsage.setOnClickListener(new View.OnClickListener() {
+        // Hint system applications
+        final LinearLayout llSystem = findViewById(R.id.llSystem);
+        Button btnSystem = findViewById(R.id.btnSystem);
+        boolean system = prefs.getBoolean("manage_system", false);
+        boolean hintSystem = prefs.getBoolean("hint_system", true);
+        llSystem.setVisibility(!system && hintSystem ? View.VISIBLE : View.GONE);
+        btnSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                prefs.edit().putBoolean("hint_usage", false).apply();
-                llUsage.setVisibility(View.GONE);
-                showHints();
+                prefs.edit().putBoolean("hint_system", false).apply();
+                llSystem.setVisibility(View.GONE);
             }
         });
-        showHints();
 
         // Listen for preference changes
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -338,85 +313,49 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         intentFilter.addDataScheme("package");
         registerReceiver(packageChangedReceiver, intentFilter);
 
-        // First use
-        boolean admob = prefs.getBoolean("admob", false);
-        if (!initialized || !admob) {
-            // Create view
-            LayoutInflater inflater = LayoutInflater.from(this);
-            View view = inflater.inflate(R.layout.first, null, false);
-
-            TextView tvFirst = view.findViewById(R.id.tvFirst);
-            TextView tvPrivacy = view.findViewById(R.id.tvPrivacy);
-            TextView tvAdmob = view.findViewById(R.id.tvAdmob);
-            tvFirst.setMovementMethod(LinkMovementMethod.getInstance());
-            tvPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
-            tvAdmob.setMovementMethod(LinkMovementMethod.getInstance());
-
-            // Show dialog
-            dialogFirst = new AlertDialog.Builder(this)
-                    .setView(view)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.app_agree, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (running) {
-                                prefs.edit().putBoolean("initialized", true).apply();
-                                prefs.edit().putBoolean("admob", true).apply();
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.app_disagree, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (running)
-                                finish();
-                        }
-                    })
-                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            dialogFirst = null;
-                        }
-                    })
-                    .create();
-            dialogFirst.show();
-        }
+//        // First use
+//        if (!initialized) {
+//            // Create view
+//            LayoutInflater inflater = LayoutInflater.from(this);
+//            View view = inflater.inflate(R.layout.first, null, false);
+//
+//            TextView tvFirst = view.findViewById(R.id.tvFirst);
+//            TextView tvPrivacy = view.findViewById(R.id.tvPrivacy);
+//            tvFirst.setMovementMethod(LinkMovementMethod.getInstance());
+//            tvPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
+//
+//            // Show dialog
+//            dialogFirst = new AlertDialog.Builder(this)
+//                    .setView(view)
+//                    .setCancelable(false)
+//                    .setPositiveButton(R.string.app_agree, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            if (running) {
+//                                prefs.edit().putBoolean("initialized", true).apply();
+//                                prefs.edit().putBoolean("admob", true).apply();
+//                            }
+//                        }
+//                    })
+//                    .setNegativeButton(R.string.app_disagree, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            if (running)
+//                                finish();
+//                        }
+//                    })
+//                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                        @Override
+//                        public void onDismiss(DialogInterface dialogInterface) {
+//                            dialogFirst = null;
+//                        }
+//                    })
+//                    .create();
+//            dialogFirst.show();
+//        }
 
         // Fill application list
         updateApplicationList(getIntent().getStringExtra(EXTRA_SEARCH));
-
-        // Update IAB SKUs
-        try {
-            iab = new IAB(new IAB.Delegate() {
-                @Override
-                public void onReady(IAB iab) {
-                    try {
-                        iab.updatePurchases();
-
-                        if (!IAB.isPurchased(ActivityPro.SKU_LOG, ActivityMain.this))
-                            prefs.edit().putBoolean("log", false).apply();
-                        if (!IAB.isPurchased(ActivityPro.SKU_THEME, ActivityMain.this)) {
-                            if (!"teal".equals(prefs.getString("theme", "teal")))
-                                prefs.edit().putString("theme", "teal").apply();
-                        }
-                        if (!IAB.isPurchased(ActivityPro.SKU_NOTIFY, ActivityMain.this))
-                            prefs.edit().putBoolean("install", false).apply();
-                        if (!IAB.isPurchased(ActivityPro.SKU_SPEED, ActivityMain.this))
-                            prefs.edit().putBoolean("show_stats", false).apply();
-                    } catch (Throwable ex) {
-                        Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-                    } finally {
-                        iab.unbind();
-                    }
-                }
-            }, this);
-            iab.bind();
-        } catch (Throwable ex) {
-            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-        }
-
-        // Initialize ads
-//        initAds();
 
         // Handle intent
         checkExtras(getIntent());
@@ -455,12 +394,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         if (adapter != null)
             adapter.notifyDataSetChanged();
 
-        // Ads
-        if (!IAB.isPurchasedAny(this) && Util.hasPlayServices(this))
-            enableAds();
-        else
-            disableAds();
-
         super.onResume();
     }
 
@@ -473,8 +406,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             return;
 
         DatabaseHelper.getInstance(this).removeAccessChangedListener(accessChangedListener);
-
-        disableAds();
     }
 
     @Override
@@ -484,10 +415,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
 
         if (Build.VERSION.SDK_INT < MIN_SDK || Util.hasXposed(this))
             return;
-
-        disableAds();
-        if (!IAB.isPurchasedAny(this) && Util.hasPlayServices(this))
-            enableAds();
     }
 
     @Override
@@ -527,11 +454,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         if (dialogAbout != null) {
             dialogAbout.dismiss();
             dialogAbout = null;
-        }
-
-        if (iab != null) {
-            iab.unbind();
-            iab = null;
         }
 
         super.onDestroy();
@@ -611,14 +533,8 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 "show_disabled".equals(name) ||
                 "sort".equals(name) ||
                 "imported".equals(name)) {
-            updateApplicationList(null);
 
-            final LinearLayout llWhitelist = findViewById(R.id.llWhitelist);
-            boolean screen_on = prefs.getBoolean("screen_on", true);
-            boolean whitelist_wifi = prefs.getBoolean("whitelist_wifi", false);
-            boolean whitelist_other = prefs.getBoolean("whitelist_other", false);
-            boolean hintWhitelist = prefs.getBoolean("hint_whitelist", true);
-            llWhitelist.setVisibility(!(whitelist_wifi || whitelist_other) && screen_on && hintWhitelist ? View.VISIBLE : View.GONE);
+            updateApplicationList(null);
 
         } else if ("manage_system".equals(name)) {
             invalidateOptionsMenu();
@@ -750,27 +666,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             searchView.setQuery(search, true);
         }
 
-        markPro(menu.findItem(R.id.menu_log), ActivityPro.SKU_LOG);
-        if (!IAB.isPurchasedAny(this))
-            markPro(menu.findItem(R.id.menu_pro), null);
-
-        if (!Util.hasValidFingerprint(this) || getIntentInvite(this).resolveActivity(getPackageManager()) == null)
-            menu.removeItem(R.id.menu_invite);
-
-        if (getIntentSupport().resolveActivity(getPackageManager()) == null)
-            menu.removeItem(R.id.menu_support);
-
         return true;
-    }
-
-    private void markPro(MenuItem menu, String sku) {
-        if (sku == null || !IAB.isPurchased(sku, this)) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            boolean dark = prefs.getBoolean("dark_theme", false);
-            SpannableStringBuilder ssb = new SpannableStringBuilder("  " + menu.getTitle());
-            ssb.setSpan(new ImageSpan(this, dark ? R.drawable.ic_shopping_cart_white_24dp : R.drawable.ic_shopping_cart_black_24dp), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            menu.setTitle(ssb);
-        }
     }
 
     @Override
@@ -837,38 +733,15 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 prefs.edit().putString("sort", "uid").apply();
                 return true;
 
-            case R.id.menu_lockdown:
-                menu_lockdown(item);
-                return true;
-
             case R.id.menu_log:
                 if (Util.canFilter(this))
-                    if (IAB.isPurchased(ActivityPro.SKU_LOG, this))
-                        startActivity(new Intent(this, ActivityLog.class));
-                    else
-                        startActivity(new Intent(this, ActivityPro.class));
+                    startActivity(new Intent(this, ActivityLog.class));
                 else
                     Toast.makeText(this, R.string.msg_unavailable, Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.menu_settings:
                 startActivity(new Intent(this, ActivitySettings.class));
-                return true;
-
-            case R.id.menu_pro:
-                startActivity(new Intent(ActivityMain.this, ActivityPro.class));
-                return true;
-
-            case R.id.menu_invite:
-                startActivityForResult(getIntentInvite(this), REQUEST_INVITE);
-                return true;
-
-            case R.id.menu_legend:
-                menu_legend();
-                return true;
-
-            case R.id.menu_support:
-                startActivity(getIntentSupport());
                 return true;
 
             case R.id.menu_about:
@@ -878,160 +751,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void showHints() {
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean hintUsage = prefs.getBoolean("hint_usage", true);
-
-        // Hint white listing
-        final LinearLayout llWhitelist = findViewById(R.id.llWhitelist);
-        Button btnWhitelist = findViewById(R.id.btnWhitelist);
-        boolean whitelist_wifi = prefs.getBoolean("whitelist_wifi", false);
-        boolean whitelist_other = prefs.getBoolean("whitelist_other", false);
-        boolean hintWhitelist = prefs.getBoolean("hint_whitelist", true);
-        llWhitelist.setVisibility(!(whitelist_wifi || whitelist_other) && hintWhitelist && !hintUsage ? View.VISIBLE : View.GONE);
-        btnWhitelist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prefs.edit().putBoolean("hint_whitelist", false).apply();
-                llWhitelist.setVisibility(View.GONE);
-            }
-        });
-
-        // Hint push messages
-        final LinearLayout llPush = findViewById(R.id.llPush);
-        Button btnPush = findViewById(R.id.btnPush);
-        boolean hintPush = prefs.getBoolean("hint_push", true);
-        llPush.setVisibility(hintPush && !hintUsage ? View.VISIBLE : View.GONE);
-        btnPush.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prefs.edit().putBoolean("hint_push", false).apply();
-                llPush.setVisibility(View.GONE);
-            }
-        });
-
-        // Hint system applications
-        final LinearLayout llSystem = findViewById(R.id.llSystem);
-        Button btnSystem = findViewById(R.id.btnSystem);
-        boolean system = prefs.getBoolean("manage_system", false);
-        boolean hintSystem = prefs.getBoolean("hint_system", true);
-        llSystem.setVisibility(!system && hintSystem ? View.VISIBLE : View.GONE);
-        btnSystem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prefs.edit().putBoolean("hint_system", false).apply();
-                llSystem.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    private void initAds() {
-        // https://developers.google.com/android/reference/com/google/android/gms/ads/package-summary
-        MobileAds.initialize(getApplicationContext(), getString(R.string.ad_app_id));
-
-        final LinearLayout llAd = findViewById(R.id.llAd);
-        TextView tvAd = findViewById(R.id.tvAd);
-        final AdView adView = findViewById(R.id.adView);
-
-        SpannableString content = new SpannableString(getString(R.string.title_pro_ads));
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        tvAd.setText(content);
-
-        tvAd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ActivityMain.this, ActivityPro.class));
-            }
-        });
-
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                Log.i(TAG, "Ad loaded");
-                llAd.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                llAd.setVisibility(View.VISIBLE);
-                switch (errorCode) {
-                    case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                        Log.w(TAG, "Ad load error=INTERNAL_ERROR");
-                        break;
-                    case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                        Log.w(TAG, "Ad load error=INVALID_REQUEST");
-                        break;
-                    case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                        Log.w(TAG, "Ad load error=NETWORK_ERROR");
-                        break;
-                    case AdRequest.ERROR_CODE_NO_FILL:
-                        Log.w(TAG, "Ad load error=NO_FILL");
-                        break;
-                    default:
-                        Log.w(TAG, "Ad load error=" + errorCode);
-                }
-            }
-
-            @Override
-            public void onAdOpened() {
-                Log.i(TAG, "Ad opened");
-            }
-
-            @Override
-            public void onAdClosed() {
-                Log.i(TAG, "Ad closed");
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                Log.i(TAG, "Ad left app");
-            }
-        });
-    }
-
-    private void enableAds() {
-        RelativeLayout rlAd = findViewById(R.id.rlAd);
-        LinearLayout llAd = findViewById(R.id.llAd);
-        final AdView adView = findViewById(R.id.adView);
-
-        rlAd.setVisibility(View.VISIBLE);
-        llAd.setVisibility(View.VISIBLE);
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    AdRequest adRequest = new AdRequest.Builder()
-                            .addTestDevice(getString(R.string.ad_test_device_id))
-                            .build();
-                    adView.loadAd(adRequest);
-                } catch (Throwable ex) {
-                    Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-                }
-            }
-        }, 1000);
-    }
-
-    private void disableAds() {
-        RelativeLayout rlAd = findViewById(R.id.rlAd);
-        AdView adView = findViewById(R.id.adView);
-
-        rlAd.setVisibility(View.GONE);
-
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) adView.getLayoutParams();
-        RelativeLayout parent = (RelativeLayout) adView.getParent();
-        parent.removeView(adView);
-
-        adView.destroy();
-        adView = new AdView(this);
-        adView.setAdSize(AdSize.SMART_BANNER);
-        adView.setAdUnitId(getString(R.string.ad_banner_unit_id));
-        adView.setId(R.id.adView);
-        adView.setLayoutParams(params);
-        parent.addView(adView);
     }
 
     private void checkExtras(Intent intent) {
@@ -1182,67 +901,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         }
     }
 
-    private void menu_legend() {
-        TypedValue tv = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorOn, tv, true);
-        int colorOn = tv.data;
-        getTheme().resolveAttribute(R.attr.colorOff, tv, true);
-        int colorOff = tv.data;
-
-        // Create view
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.legend, null, false);
-        ImageView ivLockdownOn = view.findViewById(R.id.ivLockdownOn);
-        ImageView ivWifiOn = view.findViewById(R.id.ivWifiOn);
-        ImageView ivWifiOff = view.findViewById(R.id.ivWifiOff);
-        ImageView ivOtherOn = view.findViewById(R.id.ivOtherOn);
-        ImageView ivOtherOff = view.findViewById(R.id.ivOtherOff);
-        ImageView ivScreenOn = view.findViewById(R.id.ivScreenOn);
-        ImageView ivHostAllowed = view.findViewById(R.id.ivHostAllowed);
-        ImageView ivHostBlocked = view.findViewById(R.id.ivHostBlocked);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            Drawable wrapLockdownOn = DrawableCompat.wrap(ivLockdownOn.getDrawable());
-            Drawable wrapWifiOn = DrawableCompat.wrap(ivWifiOn.getDrawable());
-            Drawable wrapWifiOff = DrawableCompat.wrap(ivWifiOff.getDrawable());
-            Drawable wrapOtherOn = DrawableCompat.wrap(ivOtherOn.getDrawable());
-            Drawable wrapOtherOff = DrawableCompat.wrap(ivOtherOff.getDrawable());
-            Drawable wrapScreenOn = DrawableCompat.wrap(ivScreenOn.getDrawable());
-            Drawable wrapHostAllowed = DrawableCompat.wrap(ivHostAllowed.getDrawable());
-            Drawable wrapHostBlocked = DrawableCompat.wrap(ivHostBlocked.getDrawable());
-
-            DrawableCompat.setTint(wrapLockdownOn, colorOff);
-            DrawableCompat.setTint(wrapWifiOn, colorOn);
-            DrawableCompat.setTint(wrapWifiOff, colorOff);
-            DrawableCompat.setTint(wrapOtherOn, colorOn);
-            DrawableCompat.setTint(wrapOtherOff, colorOff);
-            DrawableCompat.setTint(wrapScreenOn, colorOn);
-            DrawableCompat.setTint(wrapHostAllowed, colorOn);
-            DrawableCompat.setTint(wrapHostBlocked, colorOff);
-        }
-
-
-        // Show dialog
-        dialogLegend = new AlertDialog.Builder(this)
-                .setView(view)
-                .setCancelable(true)
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        dialogLegend = null;
-                    }
-                })
-                .create();
-        dialogLegend.show();
-    }
-
-    private void menu_lockdown(MenuItem item) {
-        item.setChecked(!item.isChecked());
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putBoolean("lockdown", item.isChecked()).apply();
-        ServiceSinkhole.reload("lockdown", this, false);
-        WidgetLockdown.updateWidgets(this);
-    }
-
     private void menu_about() {
         // Create view
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -1252,7 +910,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         Button btnRate = view.findViewById(R.id.btnRate);
         TextView tvLicense = view.findViewById(R.id.tvLicense);
         TextView tvPrivacy = view.findViewById(R.id.tvPrivacy);
-        TextView tvAdmob = view.findViewById(R.id.tvAdmob);
 
         // Show version
         tvVersionName.setText(Util.getSelfVersionName(this));
@@ -1264,7 +921,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         tvLicense.setMovementMethod(LinkMovementMethod.getInstance());
         tvLicense.setMovementMethod(LinkMovementMethod.getInstance());
         tvPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
-        tvAdmob.setVisibility(IAB.isPurchasedAny(this) ? View.GONE : View.VISIBLE);
 
         // Handle logcat
         view.setOnClickListener(new View.OnClickListener() {
@@ -1312,15 +968,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         dialogAbout.show();
     }
 
-    private static Intent getIntentInvite(Context context) {
-        Intent intent = new Intent("com.google.android.gms.appinvite.ACTION_APP_INVITE");
-        intent.setPackage("com.google.android.gms");
-        intent.putExtra("com.google.android.gms.appinvite.TITLE", context.getString(R.string.menu_invite));
-        intent.putExtra("com.google.android.gms.appinvite.MESSAGE", context.getString(R.string.msg_try));
-        intent.putExtra("com.google.android.gms.appinvite.BUTTON_TEXT", context.getString(R.string.msg_try));
-        // com.google.android.gms.appinvite.DEEP_LINK_URL
-        return intent;
-    }
 
     private static Intent getIntentRate(Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));
