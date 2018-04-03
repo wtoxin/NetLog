@@ -135,38 +135,10 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
 
         // Action bar
         final View actionView = getLayoutInflater().inflate(R.layout.actionmain, null, false);
-        ivIcon = actionView.findViewById(R.id.ivIcon);
-        ivQueue = actionView.findViewById(R.id.ivQueue);
         swEnabled = actionView.findViewById(R.id.swEnabled);
-        ivMetered = actionView.findViewById(R.id.ivMetered);
-
-        // Icon
-        ivIcon.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                menu_about();
-                return true;
-            }
-        });
 
         // Title
-        getSupportActionBar().setTitle(null);
-
-        // Netguard is busy
-        ivQueue.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                int location[] = new int[2];
-                actionView.getLocationOnScreen(location);
-                Toast toast = Toast.makeText(ActivityMain.this, R.string.msg_queue, Toast.LENGTH_LONG);
-                toast.setGravity(
-                        Gravity.TOP | Gravity.LEFT,
-                        location[0] + ivQueue.getLeft(),
-                        Math.round(location[1] + ivQueue.getBottom() - toast.getView().getPaddingTop()));
-                toast.show();
-                return true;
-            }
-        });
+        getSupportActionBar().setTitle("NetLog");
 
         // On/off switch
         swEnabled.setChecked(enabled);
@@ -234,22 +206,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         if (enabled)
             checkDoze();
 
-        // Network is metered
-        ivMetered.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                int location[] = new int[2];
-                actionView.getLocationOnScreen(location);
-                Toast toast = Toast.makeText(ActivityMain.this, R.string.msg_metered, Toast.LENGTH_LONG);
-                toast.setGravity(
-                        Gravity.TOP | Gravity.LEFT,
-                        location[0] + ivMetered.getLeft(),
-                        Math.round(location[1] + ivMetered.getBottom() - toast.getView().getPaddingTop()));
-                toast.show();
-                return true;
-            }
-        });
-
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(actionView);
 
@@ -303,8 +259,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         LocalBroadcastManager.getInstance(this).registerReceiver(onRulesChanged, ifr);
 
         // Listen for queue changes
-        IntentFilter ifq = new IntentFilter(ACTION_QUEUE_CHANGED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(onQueueChanged, ifq);
 
         // Listen for added/removed applications
         IntentFilter intentFilter = new IntentFilter();
@@ -432,7 +386,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(onRulesChanged);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(onQueueChanged);
         unregisterReceiver(packageChangedReceiver);
 
         if (dialogFirst != null) {
@@ -570,32 +523,16 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
 
             if (adapter != null)
                 if (intent.hasExtra(EXTRA_CONNECTED) && intent.hasExtra(EXTRA_METERED)) {
-                    ivIcon.setImageResource(Util.isNetworkActive(ActivityMain.this)
-                            ? R.drawable.ic_security_white_24dp
-                            : R.drawable.ic_security_white_24dp_60);
                     if (intent.getBooleanExtra(EXTRA_CONNECTED, false)) {
                         if (intent.getBooleanExtra(EXTRA_METERED, false))
                             adapter.setMobileActive();
                         else
                             adapter.setWifiActive();
-                        ivMetered.setVisibility(Util.isMeteredNetwork(ActivityMain.this) ? View.VISIBLE : View.INVISIBLE);
                     } else {
                         adapter.setDisconnected();
-                        ivMetered.setVisibility(View.INVISIBLE);
                     }
                 } else
                     updateApplicationList(null);
-        }
-    };
-
-    private BroadcastReceiver onQueueChanged = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "Received " + intent);
-            Util.logExtras(intent);
-            int size = intent.getIntExtra(EXTRA_SIZE, -1);
-            ivIcon.setVisibility(size == 0 ? View.VISIBLE : View.GONE);
-            ivQueue.setVisibility(size == 0 ? View.GONE : View.VISIBLE);
         }
     };
 
@@ -744,9 +681,9 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 startActivity(new Intent(this, ActivitySettings.class));
                 return true;
 
-            case R.id.menu_about:
-                menu_about();
-                return true;
+//            case R.id.menu_about:
+//                menu_about();
+//                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -900,74 +837,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             }
         }
     }
-
-    private void menu_about() {
-        // Create view
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.about, null, false);
-        TextView tvVersionName = view.findViewById(R.id.tvVersionName);
-        TextView tvVersionCode = view.findViewById(R.id.tvVersionCode);
-        Button btnRate = view.findViewById(R.id.btnRate);
-        TextView tvLicense = view.findViewById(R.id.tvLicense);
-        TextView tvPrivacy = view.findViewById(R.id.tvPrivacy);
-
-        // Show version
-        tvVersionName.setText(Util.getSelfVersionName(this));
-        if (!Util.hasValidFingerprint(this))
-            tvVersionName.setTextColor(Color.GRAY);
-        tvVersionCode.setText(Integer.toString(Util.getSelfVersionCode(this)));
-
-        // Handle license
-        tvLicense.setMovementMethod(LinkMovementMethod.getInstance());
-        tvLicense.setMovementMethod(LinkMovementMethod.getInstance());
-        tvPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
-
-        // Handle logcat
-        view.setOnClickListener(new View.OnClickListener() {
-            private short tap = 0;
-            private Toast toast = Toast.makeText(ActivityMain.this, "", Toast.LENGTH_SHORT);
-
-            @Override
-            public void onClick(View view) {
-                tap++;
-                if (tap == 7) {
-                    tap = 0;
-                    toast.cancel();
-
-                    Intent intent = getIntentLogcat();
-                    if (intent.resolveActivity(getPackageManager()) != null)
-                        startActivityForResult(intent, REQUEST_LOGCAT);
-
-                } else if (tap > 3) {
-                    toast.setText(Integer.toString(7 - tap));
-                    toast.show();
-                }
-            }
-        });
-
-        // Handle rate
-        btnRate.setVisibility(getIntentRate(this).resolveActivity(getPackageManager()) == null ? View.GONE : View.VISIBLE);
-        btnRate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(getIntentRate(ActivityMain.this));
-            }
-        });
-
-        // Show dialog
-        dialogAbout = new AlertDialog.Builder(this)
-                .setView(view)
-                .setCancelable(true)
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        dialogAbout = null;
-                    }
-                })
-                .create();
-        dialogAbout.show();
-    }
-
 
     private static Intent getIntentRate(Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName()));

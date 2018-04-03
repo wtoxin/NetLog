@@ -580,9 +580,9 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                 String path = "";
                 String path_log = path.replace(".pcap", "_log.txt");
                 String path_filter = path.replace(".pcap", "_filter.txt");
-                path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/netguard"+System.currentTimeMillis()+".pcap";
-                path_log = Environment.getExternalStorageDirectory().getAbsolutePath()+"/netguard"+System.currentTimeMillis()+"_log.txt";
-                path_filter = Environment.getExternalStorageDirectory().getAbsolutePath()+"/netguard"+System.currentTimeMillis()+"filter.txt";
+                path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/netlog"+System.currentTimeMillis()+".pcap";
+                path_log = Environment.getExternalStorageDirectory().getAbsolutePath()+"/netlog"+System.currentTimeMillis()+"_log.txt";
+                path_filter = Environment.getExternalStorageDirectory().getAbsolutePath()+"/netlog"+System.currentTimeMillis()+"filter.txt";
                 try {
                     // Stop capture
                     ServiceSinkhole.setPcap(false, ActivityLog.this);
