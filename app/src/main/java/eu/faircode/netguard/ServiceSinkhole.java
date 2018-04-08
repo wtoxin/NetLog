@@ -2089,7 +2089,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
         prefs.registerOnSharedPreferenceChangeListener(this);
 
-        Util.setTheme(this);
+        setTheme(R.style.AppThemeBlue);
         super.onCreate();
 
         HandlerThread commandThread = new HandlerThread(getString(R.string.app_name) + " command", Process.THREAD_PRIORITY_FOREGROUND);
@@ -2233,19 +2233,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String name) {
-        if ("theme".equals(name)) {
-            Log.i(TAG, "Theme changed");
-            Util.setTheme(this);
-            if (state != State.none) {
-                Log.d(TAG, "Stop foreground state=" + state.toString());
-                stopForeground(true);
-            }
-            if (state == State.enforcing)
-                startForeground(NOTIFY_ENFORCING, getEnforcingNotification(-1, -1, -1));
-            else if (state != State.none)
-                startForeground(NOTIFY_WAITING, getWaitingNotification());
-            Log.d(TAG, "Start foreground state=" + state.toString());
-        }
+
     }
 
     @Override

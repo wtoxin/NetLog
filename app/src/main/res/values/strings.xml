@@ -93,7 +93,7 @@ however it is impossible to guarantee NetGuard will work correctly on every devi
     <string name="setting_reload_onconnectivity">Reload on every connectivity change</string>
 
     <string name="setting_advanced_options">Advanced options</string>
-    <string name="setting_system">Manage system apps</string>
+    <string name="setting_system">Show system apps</string>
     <string name="setting_log_app">Log internet access</string>
     <string name="setting_access">Notify on internet access</string>
     <string name="setting_filter">Filter traffic</string>
@@ -154,7 +154,6 @@ however it is impossible to guarantee NetGuard will work correctly on every devi
     <string name="summary_eu_roaming">Do not apply roaming rules when the SIM and mobile network country are within the EU (roam like at home)</string>
     <string name="summary_call">Disable NetGuard on incoming or outgoing telephone call. This can be used to work around IP/Wi-Fi calling problems.</string>
 
-    <string name="summary_system">Define rules for system apps (for experts)</string>
     <string name="summary_log_app">Log attempts to access the internet for apps. This might result in extra battery usage.</string>
     <string name="summary_access">Show a status bar notification when an app attempts to access a new internet address (when filtering is disabled, only blocked internet access attempts will be notified)</string>
     <string name="summary_filter">Filter IP packets going out of the VPN tunnel. This might result in extra battery usage.</string>
