@@ -35,7 +35,7 @@ public class ActivityDns extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Util.setTheme(this);
+        setTheme(R.style.AppThemeBlue);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resolving);
 
@@ -59,10 +59,6 @@ public class ActivityDns extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
                 refresh();
-                return true;
-
-            case R.id.menu_cleanup:
-                cleanup();
                 return true;
 
             case R.id.menu_clear:

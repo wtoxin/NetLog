@@ -383,28 +383,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
                 }
             }
 
-            // Watchdog
-            if (cmd == Command.start || cmd == Command.reload || cmd == Command.stop) {
-                Intent watchdogIntent = new Intent(ServiceSinkhole.this, ServiceSinkhole.class);
-                watchdogIntent.setAction(ACTION_WATCHDOG);
-                PendingIntent pi;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    pi = PendingIntent.getForegroundService(ServiceSinkhole.this, 1, watchdogIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                else
-                    pi = PendingIntent.getService(ServiceSinkhole.this, 1, watchdogIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                am.cancel(pi);
-
-                if (cmd != Command.stop) {
-                    int watchdog = Integer.parseInt(prefs.getString("watchdog", "0"));
-                    if (watchdog > 0) {
-                        Log.i(TAG, "Watchdog " + watchdog + " minutes");
-                        am.setInexactRepeating(AlarmManager.RTC, SystemClock.elapsedRealtime() + watchdog * 60 * 1000, watchdog * 60 * 1000, pi);
-                    }
-                }
-            }
-
             try {
                 switch (cmd) {
                     case run:
@@ -528,8 +506,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
                 }
             }
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSinkhole.this);
-            boolean clear = prefs.getBoolean("clear_onreload", false);
+            boolean clear_onreload = false;
 
             if (state != State.enforcing) {
                 if (state != State.none) {
@@ -549,7 +526,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
                 Log.i(TAG, "Legacy restart");
 
                 if (vpn != null) {
-                    stopNative(vpn, clear);
+                    stopNative(vpn, clear_onreload);
                     stopVPN(vpn);
                     vpn = null;
                     try {
@@ -562,7 +539,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
             } else {
                 if (vpn != null && true && builder.equals(last_builder)) {
                     Log.i(TAG, "Native restart");
-                    stopNative(vpn, clear);
+                    stopNative(vpn, clear_onreload);
 
                 } else {
                     last_builder = builder;
@@ -574,7 +551,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
                     if (prev != null && vpn == null) {
                         Log.w(TAG, "Handover failed");
-                        stopNative(prev, clear);
+                        stopNative(prev, clear_onreload);
                         stopVPN(prev);
                         prev = null;
                         try {
@@ -587,7 +564,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
                     }
 
                     if (prev != null) {
-                        stopNative(prev, clear);
+                        stopNative(prev, clear_onreload);
                         stopVPN(prev);
                     }
                 }
@@ -635,11 +612,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
             // Clear expired DNS records
             DatabaseHelper.getInstance(ServiceSinkhole.this).cleanupDns();
-
-            // Check for update
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSinkhole.this);
-            if (!Util.isPlayStoreInstall(ServiceSinkhole.this) && false)
-                checkUpdate();
         }
 
         private void watchdog(Intent intent) {
@@ -649,52 +621,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
                     Log.e(TAG, "Service was killed");
                     start();
                 }
-            }
-        }
-
-        private void checkUpdate() {
-            StringBuilder json = new StringBuilder();
-            HttpsURLConnection urlConnection = null;
-            try {
-                URL url = new URL("https://api.github.com/repos/M66B/NetGuard/releases/latest");
-                urlConnection = (HttpsURLConnection) url.openConnection();
-                BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
-                String line;
-                while ((line = br.readLine()) != null)
-                    json.append(line);
-
-            } catch (Throwable ex) {
-                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-            } finally {
-                if (urlConnection != null)
-                    urlConnection.disconnect();
-            }
-
-            try {
-                JSONObject jroot = new JSONObject(json.toString());
-                if (jroot.has("tag_name") && jroot.has("html_url") && jroot.has("assets")) {
-                    String url = jroot.getString("html_url");
-                    JSONArray jassets = jroot.getJSONArray("assets");
-                    if (jassets.length() > 0) {
-                        JSONObject jasset = jassets.getJSONObject(0);
-                        if (jasset.has("name")) {
-                            String version = jroot.getString("tag_name");
-                            String name = jasset.getString("name");
-                            Log.i(TAG, "Tag " + version + " name " + name + " url " + url);
-
-                            Version current = new Version(Util.getSelfVersionName(ServiceSinkhole.this));
-                            Version available = new Version(version);
-                            if (current.compareTo(available) < 0) {
-                                Log.i(TAG, "Update available from " + current + " to " + available);
-                                showUpdateNotification(name, url);
-                            } else
-                                Log.i(TAG, "Up-to-date current version " + current);
-                        }
-                    }
-                }
-            } catch (JSONException ex) {
-                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
             }
         }
 
@@ -760,7 +686,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
         private void usage(Usage usage) {
             if (usage.Uid >= 0 && !(usage.Uid == 0 && usage.Protocol == 17 && usage.DPort == 53)) {
-//                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSinkhole.this);
                 boolean filter = true;
                 boolean log_app = true;
                 boolean track_usage = true;
@@ -1102,70 +1027,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
                 }
 
         // Remove local DNS servers when not routing LAN
-        boolean lan = prefs.getBoolean("lan", false);
-        boolean use_hosts = true && prefs.getBoolean("use_hosts", false);
-        if (lan && use_hosts) {
-            List<InetAddress> listLocal = new ArrayList<>();
-            try {
-                Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
-                if (nis != null)
-                    while (nis.hasMoreElements()) {
-                        NetworkInterface ni = nis.nextElement();
-                        if (ni != null && ni.isUp() && !ni.isLoopback()) {
-                            List<InterfaceAddress> ias = ni.getInterfaceAddresses();
-                            if (ias != null)
-                                for (InterfaceAddress ia : ias) {
-                                    InetAddress hostAddress = ia.getAddress();
-                                    BigInteger host = new BigInteger(1, hostAddress.getAddress());
-
-                                    int prefix = ia.getNetworkPrefixLength();
-                                    BigInteger mask = BigInteger.valueOf(-1).shiftLeft(hostAddress.getAddress().length * 8 - prefix);
-
-                                    for (InetAddress dns : listDns)
-                                        if (hostAddress.getAddress().length == dns.getAddress().length) {
-                                            BigInteger ip = new BigInteger(1, dns.getAddress());
-
-                                            if (host.and(mask).equals(ip.and(mask))) {
-                                                Log.i(TAG, "Local DNS server host=" + hostAddress + "/" + prefix + " dns=" + dns);
-                                                listLocal.add(dns);
-                                            }
-                                        }
-                                }
-                        }
-                    }
-            } catch (Throwable ex) {
-                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-            }
-
-            List<InetAddress> listDns4 = new ArrayList<>();
-            List<InetAddress> listDns6 = new ArrayList<>();
-            try {
-                listDns4.add(InetAddress.getByName("8.8.8.8"));
-                listDns4.add(InetAddress.getByName("8.8.4.4"));
-                if (ip6) {
-                    listDns6.add(InetAddress.getByName("2001:4860:4860::8888"));
-                    listDns6.add(InetAddress.getByName("2001:4860:4860::8844"));
-                }
-
-            } catch (Throwable ex) {
-                Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-            }
-
-            for (InetAddress dns : listLocal) {
-                listDns.remove(dns);
-                if (dns instanceof Inet4Address) {
-                    if (listDns4.size() > 0) {
-                        listDns.add(listDns4.get(0));
-                        listDns4.remove(0);
-                    }
-                } else {
-                    if (listDns6.size() > 0) {
-                        listDns.add(listDns6.get(0));
-                        listDns6.remove(0);
-                    }
-                }
-            }
-        }
 
         return listDns;
     }
@@ -1384,7 +1245,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
         // Prepare rules
         if (filter) {
             prepareUidAllowed(listAllowed, listRule);
-            prepareHostsBlocked();
+//            prepareHostsBlocked();
             prepareUidIPFilters(null);
             prepareForwarding();
         } else {
@@ -1407,15 +1268,9 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
         if (log || log_app || filter) {
             int prio = Integer.parseInt(prefs.getString("loglevel", Integer.toString(Log.WARN)));
-            final int rcode = Integer.parseInt(prefs.getString("rcode", "3"));
-            if (prefs.getBoolean("socks5_enabled", false))
-                jni_socks5(
-                        prefs.getString("socks5_addr", ""),
-                        Integer.parseInt(prefs.getString("socks5_port", "0")),
-                        prefs.getString("socks5_username", ""),
-                        prefs.getString("socks5_password", ""));
-            else
-                jni_socks5("", 0, "", "");
+            final int rcode = 3;
+
+            jni_socks5("", 0, "", "");
 
             if (tunnelThread == null) {
                 Log.i(TAG, "Starting tunnel thread");
@@ -1486,64 +1341,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
         lock.writeLock().unlock();
     }
-
-    private void prepareHostsBlocked() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSinkhole.this);
-        boolean use_hosts = true && prefs.getBoolean("use_hosts", false);
-        File hosts = new File(getFilesDir(), "hosts.txt");
-        if (!use_hosts || !hosts.exists() || !hosts.canRead()) {
-            Log.i(TAG, "Hosts file use=" + use_hosts + " exists=" + hosts.exists());
-            lock.writeLock().lock();
-            mapHostsBlocked.clear();
-            lock.writeLock().unlock();
-            return;
-        }
-
-        boolean changed = (hosts.lastModified() != last_hosts_modified);
-        if (!changed && mapHostsBlocked.size() > 0) {
-            Log.i(TAG, "Hosts file unchanged");
-            return;
-        }
-        last_hosts_modified = hosts.lastModified();
-
-        lock.writeLock().lock();
-
-        mapHostsBlocked.clear();
-
-        int count = 0;
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(hosts));
-            String line;
-            while ((line = br.readLine()) != null) {
-                int hash = line.indexOf('#');
-                if (hash >= 0)
-                    line = line.substring(0, hash);
-                line = line.trim();
-                if (line.length() > 0) {
-                    String[] words = line.split("\\s+");
-                    if (words.length == 2) {
-                        count++;
-                        mapHostsBlocked.put(words[1], true);
-                    } else
-                        Log.i(TAG, "Invalid hosts file line: " + line);
-                }
-            }
-            mapHostsBlocked.put("test.netguard.me", true);
-            Log.i(TAG, count + " hosts read");
-        } catch (IOException ex) {
-            Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
-        } finally {
-            if (br != null)
-                try {
-                    br.close();
-                } catch (IOException exex) {
-                    Log.e(TAG, exex.toString() + "\n" + Log.getStackTraceString(exex));
-                }
-        }
-
-        lock.writeLock().unlock();
-    }
+//   prepareHostsBlocked
 
     private void prepareUidIPFilters(String dname) {
         SharedPreferences lockdown = getSharedPreferences("lockdown", Context.MODE_PRIVATE);
@@ -1650,14 +1448,10 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
     }
 
     private void prepareNotify(List<Rule> listRule) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean notify = prefs.getBoolean("notify_access", false);
-        boolean system = prefs.getBoolean("manage_system", false);
-
         lock.writeLock().lock();
         mapNotify.clear();
         for (Rule rule : listRule)
-            mapNotify.put(rule.uid, notify && rule.notify && (system || !rule.system));
+            mapNotify.put(rule.uid, false);
         lock.writeLock().unlock();
     }
 
@@ -2882,28 +2676,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
         cursor.close();
 
         NotificationManagerCompat.from(this).notify(uid + 10000, notification.build());
-    }
-
-    private void showUpdateNotification(String name, String url) {
-        Intent download = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        PendingIntent pi = PendingIntent.getActivity(this, 0, download, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        TypedValue tv = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, tv, true);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "notify");
-        builder.setSmallIcon(R.drawable.ic_security_white_24dp)
-                .setContentTitle(name)
-                .setContentText(getString(R.string.msg_update))
-                .setContentIntent(pi)
-                .setColor(tv.data)
-                .setOngoing(false)
-                .setAutoCancel(true);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            builder.setCategory(NotificationCompat.CATEGORY_STATUS)
-                    .setVisibility(NotificationCompat.VISIBILITY_SECRET);
-
-        NotificationManagerCompat.from(this).notify(NOTIFY_UPDATE, builder.build());
     }
 
     private void removeWarningNotifications() {

@@ -112,8 +112,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             setContentView(R.layout.android);
             return;
         }
-
-        Util.setTheme(this);
+        setTheme(R.style.AppThemeBlue);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -424,9 +423,9 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             if (resultCode == RESULT_OK) {
                 ServiceSinkhole.start("prepared", this);
 
-                Toast on = Toast.makeText(ActivityMain.this, R.string.msg_on, Toast.LENGTH_LONG);
-                on.setGravity(Gravity.CENTER, 0, 0);
-                on.show();
+//                Toast on = Toast.makeText(ActivityMain.this, R.string.msg_on, Toast.LENGTH_LONG);
+//                on.setGravity(Gravity.CENTER, 0, 0);
+//                on.show();
 
                 checkDoze();
             } else if (resultCode == RESULT_CANCELED)
@@ -627,8 +626,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             menu.findItem(R.id.menu_sort_uid).setChecked(true);
         else
             menu.findItem(R.id.menu_sort_name).setChecked(true);
-
-        menu.findItem(R.id.menu_lockdown).setChecked(prefs.getBoolean("lockdown", false));
 
         return super.onPrepareOptionsMenu(menu);
     }

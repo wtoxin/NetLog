@@ -106,7 +106,7 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
     private static final Intent INTENT_VPN_SETTINGS = new Intent("android.net.vpn.SETTINGS");
 
     protected void onCreate(Bundle savedInstanceState) {
-        Util.setTheme(this);
+        setTheme(R.style.AppThemeBlue);
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new FragmentSettings()).commit();
         getSupportActionBar().setTitle(R.string.menu_settings);
@@ -136,17 +136,6 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         Preference pref_screen_delay = screen.findPreference("screen_delay");
         pref_screen_delay.setTitle(getString(R.string.setting_delay, prefs.getString("screen_delay", "0")));
 
-        // Handle theme
-        Preference pref_screen_theme = screen.findPreference("theme");
-        String theme = prefs.getString("theme", "teal");
-        String[] themeNames = getResources().getStringArray(R.array.themeNames);
-        String[] themeValues = getResources().getStringArray(R.array.themeValues);
-        for (int i = 0; i < themeNames.length; i++)
-            if (theme.equals(themeValues[i])) {
-                pref_screen_theme.setTitle(getString(R.string.setting_theme, themeNames[i]));
-                break;
-            }
-
         // Wi-Fi home
         MultiSelectListPreference pref_wifi_homes = (MultiSelectListPreference) screen.findPreference("wifi_homes");
         Set<String> ssids = prefs.getStringSet("wifi_homes", new HashSet<String>());
@@ -167,37 +156,37 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         pref_wifi_homes.setEntries(listSSID.toArray(new CharSequence[0]));
         pref_wifi_homes.setEntryValues(listSSID.toArray(new CharSequence[0]));
 
-        Preference pref_reset_usage = screen.findPreference("reset_usage");
-        pref_reset_usage.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Util.areYouSure(ActivitySettings.this, R.string.setting_reset_usage, new Util.DoubtListener() {
-                    @Override
-                    public void onSure() {
-                        new AsyncTask<Object, Object, Throwable>() {
-                            @Override
-                            protected Throwable doInBackground(Object... objects) {
-                                try {
-                                    DatabaseHelper.getInstance(ActivitySettings.this).resetUsage(-1);
-                                    return null;
-                                } catch (Throwable ex) {
-                                    return ex;
-                                }
-                            }
-
-                            @Override
-                            protected void onPostExecute(Throwable ex) {
-                                if (ex == null)
-                                    Toast.makeText(ActivitySettings.this, R.string.msg_completed, Toast.LENGTH_LONG).show();
-                                else
-                                    Toast.makeText(ActivitySettings.this, ex.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                });
-                return false;
-            }
-        });
+//        Preference pref_reset_usage = screen.findPreference("reset_usage");
+//        pref_reset_usage.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                Util.areYouSure(ActivitySettings.this, R.string.setting_reset_usage, new Util.DoubtListener() {
+//                    @Override
+//                    public void onSure() {
+//                        new AsyncTask<Object, Object, Throwable>() {
+//                            @Override
+//                            protected Throwable doInBackground(Object... objects) {
+//                                try {
+//                                    DatabaseHelper.getInstance(ActivitySettings.this).resetUsage(-1);
+//                                    return null;
+//                                } catch (Throwable ex) {
+//                                    return ex;
+//                                }
+//                            }
+//
+//                            @Override
+//                            protected void onPostExecute(Throwable ex) {
+//                                if (ex == null)
+//                                    Toast.makeText(ActivitySettings.this, R.string.msg_completed, Toast.LENGTH_LONG).show();
+//                                else
+//                                    Toast.makeText(ActivitySettings.this, ex.toString(), Toast.LENGTH_LONG).show();
+//                            }
+//                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//                    }
+//                });
+//                return false;
+//            }
+//        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             TwoStatePreference pref_reload_onconnectivity =
@@ -206,64 +195,24 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
             pref_reload_onconnectivity.setEnabled(false);
         }
 
-        // Handle port forwarding
-        Preference pref_forwarding = screen.findPreference("forwarding");
-        pref_forwarding.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(ActivitySettings.this, ActivityForwarding.class));
-                return true;
-            }
-        });
-
-        boolean can = Util.canFilter(this);
-        TwoStatePreference pref_log_app = (TwoStatePreference) screen.findPreference("log_app");
-        TwoStatePreference pref_filter = (TwoStatePreference) screen.findPreference("filter");
-        pref_log_app.setEnabled(can);
-        pref_filter.setEnabled(can);
-        if (!can) {
-            pref_log_app.setSummary(R.string.msg_unavailable);
-            pref_filter.setSummary(R.string.msg_unavailable);
-        }
-
         // VPN parameters
         screen.findPreference("vpn4").setTitle(getString(R.string.setting_vpn4, prefs.getString("vpn4", "10.1.10.1")));
         screen.findPreference("vpn6").setTitle(getString(R.string.setting_vpn6, prefs.getString("vpn6", "fd00:1:fd00:1:fd00:1:fd00:1")));
         EditTextPreference pref_dns1 = (EditTextPreference) screen.findPreference("dns");
         EditTextPreference pref_dns2 = (EditTextPreference) screen.findPreference("dns2");
-        EditTextPreference pref_ttl = (EditTextPreference) screen.findPreference("ttl");
         List<String> def_dns = Util.getDefaultDNS(this);
         pref_dns1.getEditText().setHint(def_dns.get(0));
         pref_dns2.getEditText().setHint(def_dns.get(1));
         pref_dns1.setTitle(getString(R.string.setting_dns, prefs.getString("dns", def_dns.get(0))));
         pref_dns2.setTitle(getString(R.string.setting_dns, prefs.getString("dns2", def_dns.get(1))));
-        pref_ttl.setTitle(getString(R.string.setting_ttl, prefs.getString("ttl", "259200")));
-
-        // SOCKS5 parameters
-        screen.findPreference("socks5_addr").setTitle(getString(R.string.setting_socks5_addr, prefs.getString("socks5_addr", "-")));
-        screen.findPreference("socks5_port").setTitle(getString(R.string.setting_socks5_port, prefs.getString("socks5_port", "-")));
-        screen.findPreference("socks5_username").setTitle(getString(R.string.setting_socks5_username, prefs.getString("socks5_username", "-")));
-        screen.findPreference("socks5_password").setTitle(getString(R.string.setting_socks5_password, TextUtils.isEmpty(prefs.getString("socks5_username", "")) ? "-" : "*****"));
 
         // PCAP parameters
-        screen.findPreference("pcap_record_size").setTitle(getString(R.string.setting_pcap_record_size, prefs.getString("pcap_record_size", "8192")));
-        screen.findPreference("pcap_file_size").setTitle(getString(R.string.setting_pcap_file_size, prefs.getString("pcap_file_size", "50")));
+        screen.findPreference("pcap_record_size").setTitle(getString(R.string.setting_pcap_record_size, prefs.getString("pcap_record_size", "65536")));
+        screen.findPreference("pcap_file_size").setTitle(getString(R.string.setting_pcap_file_size, prefs.getString("pcap_file_size", "1024")));
 
         // Watchdog
-        screen.findPreference("watchdog").setTitle(getString(R.string.setting_watchdog, prefs.getString("watchdog", "0")));
 
         // Show resolved
-        Preference pref_show_resolved = screen.findPreference("show_resolved");
-        if (Util.isPlayStoreInstall(this))
-            cat_advanced.removePreference(pref_show_resolved);
-        else
-            pref_show_resolved.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    startActivity(new Intent(ActivitySettings.this, ActivityDns.class));
-                    return true;
-                }
-            });
 
         // Handle stats
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -295,93 +244,6 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
             }
         });
 
-        // Hosts file settings
-        Preference pref_block_domains = screen.findPreference("use_hosts");
-        EditTextPreference pref_rcode = (EditTextPreference) screen.findPreference("rcode");
-        Preference pref_hosts_import = screen.findPreference("hosts_import");
-        EditTextPreference pref_hosts_url = (EditTextPreference) screen.findPreference("hosts_url");
-        final Preference pref_hosts_download = screen.findPreference("hosts_download");
-
-        pref_rcode.setTitle(getString(R.string.setting_rcode, prefs.getString("rcode", "3")));
-
-        if (Util.isPlayStoreInstall(this)) {
-            Log.i(TAG, "Play store install");
-            cat_options.removePreference(screen.findPreference("update_check"));
-            cat_advanced.removePreference(pref_block_domains);
-            cat_advanced.removePreference(pref_rcode);
-            cat_advanced.removePreference(pref_forwarding);
-            cat_backup.removePreference(pref_hosts_import);
-            cat_backup.removePreference(pref_hosts_url);
-            cat_backup.removePreference(pref_hosts_download);
-
-        } else {
-            String last_import = prefs.getString("hosts_last_import", null);
-            String last_download = prefs.getString("hosts_last_download", null);
-            if (last_import != null)
-                pref_hosts_import.setSummary(getString(R.string.msg_import_last, last_import));
-            if (last_download != null)
-                pref_hosts_download.setSummary(getString(R.string.msg_download_last, last_download));
-
-            // Handle hosts import
-            // https://github.com/Free-Software-for-Android/AdAway/wiki/HostsSources
-            pref_hosts_import.setEnabled(getIntentOpenHosts().resolveActivity(getPackageManager()) != null);
-            pref_hosts_import.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    startActivityForResult(getIntentOpenHosts(), ActivitySettings.REQUEST_HOSTS);
-                    return true;
-                }
-            });
-
-            // Handle hosts file download
-            pref_hosts_url.setSummary(pref_hosts_url.getText());
-            pref_hosts_download.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    final File tmp = new File(getFilesDir(), "hosts.tmp");
-                    final File hosts = new File(getFilesDir(), "hosts.txt");
-                    EditTextPreference pref_hosts_url = (EditTextPreference) screen.findPreference("hosts_url");
-                    try {
-                        new DownloadTask(ActivitySettings.this, new URL(pref_hosts_url.getText()), tmp, new DownloadTask.Listener() {
-                            @Override
-                            public void onCompleted() {
-                                if (hosts.exists())
-                                    hosts.delete();
-                                tmp.renameTo(hosts);
-
-                                String last = SimpleDateFormat.getDateTimeInstance().format(new Date().getTime());
-                                prefs.edit().putString("hosts_last_download", last).apply();
-
-                                if (running) {
-                                    pref_hosts_download.setSummary(getString(R.string.msg_download_last, last));
-                                    Toast.makeText(ActivitySettings.this, R.string.msg_downloaded, Toast.LENGTH_LONG).show();
-                                }
-
-                                ServiceSinkhole.reload("hosts file download", ActivitySettings.this, false);
-                            }
-
-                            @Override
-                            public void onCancelled() {
-                                if (tmp.exists())
-                                    tmp.delete();
-                            }
-
-                            @Override
-                            public void onException(Throwable ex) {
-                                if (tmp.exists())
-                                    tmp.delete();
-
-                                if (running)
-                                    Toast.makeText(ActivitySettings.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    } catch (MalformedURLException ex) {
-                        Toast.makeText(ActivitySettings.this, ex.toString(), Toast.LENGTH_LONG).show();
-                    }
-                    return true;
-                }
-            });
-        }
 
         // Development
         if (!Util.isDebuggable(this))
@@ -413,26 +275,11 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         disableSetting("screen_backup");
         disableSetting("screen_development");
         disableSetting("screen_technical");
-        disableSetting("log_app");
-        disableSetting("notify_access");
-        disableSetting("filter");
-        disableSetting("clear_onreload");
-        disableSetting("track_usage");
-        disableSetting("reset_usage");
-        disableSetting("use_hosts");
-        disableSetting("rcode");
-        disableSetting("forwarding");
+//        disableSetting("log_app");
         disableSetting("vpn4");
         disableSetting("vpn6");
         disableSetting("dns");
         disableSetting("dns2");
-        disableSetting("ttl");
-        disableSetting("socks5_enabled");
-        disableSetting("socks5_addr");
-        disableSetting("socks5_username");
-        disableSetting("socks5_password");
-        disableSetting("watchdog");
-        disableSetting("show_resolved");
 
         screen.removePreference(screen.findPreference("screen_defaults"));
 
@@ -442,28 +289,6 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         screen.removePreference(screen.findPreference("screen_backup"));
         screen.removePreference(screen.findPreference("screen_development"));
         screen.removePreference(screen.findPreference("screen_technical"));
-
-//        cat_advanced.removePreference(screen.findPreference("log_app"));
-//        cat_advanced.removePreference(screen.findPreference("notify_access"));
-//        cat_advanced.removePreference(screen.findPreference("filter"));
-//        cat_advanced.removePreference(screen.findPreference("clear_onreload"));
-//        cat_advanced.removePreference(screen.findPreference("track_usage"));
-//        cat_advanced.removePreference(screen.findPreference("reset_usage"));
-//        cat_advanced.removePreference(screen.findPreference("use_hosts"));
-//        cat_advanced.removePreference(screen.findPreference("rcode"));
-//        cat_advanced.removePreference(screen.findPreference("forwarding"));
-//        cat_advanced.removePreference(screen.findPreference("vpn4"));
-//        cat_advanced.removePreference(screen.findPreference("vpn6"));
-//        cat_advanced.removePreference(screen.findPreference("dns"));
-//        cat_advanced.removePreference(screen.findPreference("dns2"));
-//        cat_advanced.removePreference(screen.findPreference("ttl"));
-//        cat_advanced.removePreference(screen.findPreference("socks5_enabled"));
-//        cat_advanced.removePreference(screen.findPreference("socks5_addr"));
-//        cat_advanced.removePreference(screen.findPreference("socks5_port"));
-//        cat_advanced.removePreference(screen.findPreference("socks5_username"));
-//        cat_advanced.removePreference(screen.findPreference("socks5_password"));
-//        cat_advanced.removePreference(screen.findPreference("watchdog"));
-//        cat_advanced.removePreference(screen.findPreference("show_resolved"));
     }
 
     private void disableSetting(String setting) {
@@ -553,9 +378,6 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         else if ("screen_delay".equals(name))
             getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_delay, prefs.getString(name, "0")));
 
-        else if ("theme".equals(name) || "dark_theme".equals(name))
-            recreate();
-
         else if ("subnet".equals(name))
             ServiceSinkhole.reload("changed " + name, this, false);
 
@@ -612,41 +434,7 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
             Intent ruleset = new Intent(ActivityMain.ACTION_RULES_CHANGED);
             LocalBroadcastManager.getInstance(this).sendBroadcast(ruleset);
 
-        } else if ("filter".equals(name)) {
-            // Show dialog
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && prefs.getBoolean(name, false)) {
-                LayoutInflater inflater = LayoutInflater.from(ActivitySettings.this);
-                View view = inflater.inflate(R.layout.filter, null, false);
-                dialogFilter = new AlertDialog.Builder(ActivitySettings.this)
-                        .setView(view)
-                        .setCancelable(false)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing
-                            }
-                        })
-                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialogInterface) {
-                                dialogFilter = null;
-                            }
-                        })
-                        .create();
-                dialogFilter.show();
-            } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && !prefs.getBoolean(name, false)) {
-                prefs.edit().putBoolean(name, true).apply();
-                Toast.makeText(ActivitySettings.this, R.string.msg_filter4, Toast.LENGTH_SHORT).show();
-            }
-
-            ((TwoStatePreference) getPreferenceScreen().findPreference(name)).setChecked(prefs.getBoolean(name, false));
-
-            ServiceSinkhole.reload("changed " + name, this, false);
-
-        } else if ("use_hosts".equals(name))
-            ServiceSinkhole.reload("changed " + name, this, false);
-
-        else if ("vpn4".equals(name)) {
+        } else if ("vpn4".equals(name)) {
             String vpn4 = prefs.getString(name, null);
             try {
                 checkAddress(vpn4);
@@ -689,50 +477,11 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
                             prefs.getString(name, Util.getDefaultDNS(this).get("dns".equals(name) ? 0 : 1))));
             ServiceSinkhole.reload("changed " + name, this, false);
 
-        } else if ("ttl".equals(name))
-            getPreferenceScreen().findPreference(name).setTitle(
-                    getString(R.string.setting_ttl, prefs.getString(name, "259200")));
-
-        else if ("rcode".equals(name)) {
-            getPreferenceScreen().findPreference(name).setTitle(
-                    getString(R.string.setting_rcode, prefs.getString(name, "3")));
-            ServiceSinkhole.reload("changed " + name, this, false);
-
-        } else if ("socks5_enabled".equals(name))
-            ServiceSinkhole.reload("changed " + name, this, false);
-
-        else if ("socks5_addr".equals(name)) {
-            String socks5_addr = prefs.getString(name, null);
-            try {
-                if (!TextUtils.isEmpty(socks5_addr) && !Util.isNumericAddress(socks5_addr))
-                    throw new IllegalArgumentException("Bad address");
-            } catch (Throwable ex) {
-                prefs.edit().remove(name).apply();
-                ((EditTextPreference) getPreferenceScreen().findPreference(name)).setText(null);
-                if (!TextUtils.isEmpty(socks5_addr))
-                    Toast.makeText(ActivitySettings.this, ex.toString(), Toast.LENGTH_LONG).show();
-            }
-            getPreferenceScreen().findPreference(name).setTitle(
-                    getString(R.string.setting_socks5_addr, prefs.getString(name, "-")));
-            ServiceSinkhole.reload("changed " + name, this, false);
-
-        } else if ("socks5_port".equals(name)) {
-            getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_socks5_port, prefs.getString(name, "-")));
-            ServiceSinkhole.reload("changed " + name, this, false);
-
-        } else if ("socks5_username".equals(name)) {
-            getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_socks5_username, prefs.getString(name, "-")));
-            ServiceSinkhole.reload("changed " + name, this, false);
-
-        } else if ("socks5_password".equals(name)) {
-            getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_socks5_password, TextUtils.isEmpty(prefs.getString(name, "")) ? "-" : "*****"));
-            ServiceSinkhole.reload("changed " + name, this, false);
-
         } else if ("pcap_record_size".equals(name) || "pcap_file_size".equals(name)) {
             if ("pcap_record_size".equals(name))
-                getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_pcap_record_size, prefs.getString(name, "8192")));
+                getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_pcap_record_size, prefs.getString(name, "65536")));
             else
-                getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_pcap_file_size, prefs.getString(name, "50")));
+                getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_pcap_file_size, prefs.getString(name, "1024")));
 
             ServiceSinkhole.setPcap(false, this);
 
@@ -742,10 +491,6 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
 
             if (prefs.getBoolean("pcap", false))
                 ServiceSinkhole.setPcap(true, this);
-
-        } else if ("watchdog".equals(name)) {
-            getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_watchdog, prefs.getString(name, "0")));
-            ServiceSinkhole.reload("changed " + name, this, false);
 
         } else if ("show_stats".equals(name))
             ServiceSinkhole.reloadStats("changed " + name, this);

@@ -154,16 +154,13 @@
                     android:layout_weight="1"
                     android:text="@string/title_access"
                     android:textAppearance="@style/TextTitle" />
-
-                <ImageView
-                    android:id="@+id/ivLive"
+                <ImageButton
+                    android:id="@+id/btnClearAccess"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:src="?attr/iconPause"
-                    android:visibility="gone" />
+                    android:layout_marginTop="4dp"
+                    android:src="?attr/iconDelete" />
             </LinearLayout>
 
             <eu.faircode.netguard.ExpandedListView
@@ -171,15 +168,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp" />
-
-            <ImageButton
-                android:id="@+id/btnClearAccess"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="4dp"
-                android:src="?attr/iconDelete" />
-
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

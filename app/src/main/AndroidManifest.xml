@@ -136,27 +136,6 @@
                 android:value=".ActivitySettings" />
         </activity>
 
-        <activity
-            android:name=".ActivityForwarding"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/setting_forwarding"
-            android:parentActivityName=".ActivitySettings">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ActivitySettings" />
-        </activity>
-
-        <activity
-            android:name=".ActivityForwardApproval"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/AppDialog">
-            <intent-filter>
-                <action android:name="eu.faircode.netguard.START_PORT_FORWARD" />
-                <action android:name="eu.faircode.netguard.STOP_PORT_FORWARD" />
-            </intent-filter>
-        </activity>
-
         <service
             android:name=".ServiceSinkhole"
             android:label="@string/app_name"
@@ -171,46 +150,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="eu.faircode.netguard.DOWNLOAD_HOSTS_FILE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".ServiceTileMain"
-            android:icon="@drawable/ic_security_white_24dp"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".ServiceTileGraph"
-            android:icon="@drawable/ic_equalizer_white_24dp"
-            android:label="@string/setting_stats_category"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".ServiceTileFilter"
-            android:icon="@drawable/ic_filter_list_white_24dp"
-            android:label="@string/setting_filter"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".ServiceTileLockdown"
-            android:icon="@drawable/ic_lock_outline_white_24dp"
-            android:label="@string/setting_lockdown"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 

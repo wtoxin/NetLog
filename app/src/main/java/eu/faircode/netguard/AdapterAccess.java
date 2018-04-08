@@ -127,8 +127,8 @@ public class AdapterAccess extends CursorAdapter {
             }
         }
 
-        String dest = Util.getProtocolName(protocol, version, true) +
-                " " + daddr + (dport > 0 ? "/" + dport : "") + (count > 1 ? " ?" + count : "");
+        String dest = Util.getProtocolName(protocol, version, false) +
+                " " + daddr + (dport > 0 ? "/" + dport : "");
         SpannableString span = new SpannableString(dest);
         span.setSpan(new UnderlineSpan(), 0, dest.length(), 0);
         tvDest.setText(span);
@@ -169,11 +169,11 @@ public class AdapterAccess extends CursorAdapter {
         if (connections > 0)
             tvConnections.setText(context.getString(R.string.msg_count, connections));
 
-        if (sent > 1024 * 1204 * 1024L || received > 1024 * 1024 * 1024L)
+        if (sent > 1024 * 1024 * 1024L || received > 1024 * 1024 * 1024L)
             tvTraffic.setText(context.getString(R.string.msg_gb,
                     (sent > 0 ? sent / (1024 * 1024 * 1024f) : 0),
                     (received > 0 ? received / (1024 * 1024 * 1024f) : 0)));
-        else if (sent > 1204 * 1024L || received > 1024 * 1024L)
+        else if (sent > 1024 * 1024L || received > 1024 * 1024L)
             tvTraffic.setText(context.getString(R.string.msg_mb,
                     (sent > 0 ? sent / (1024 * 1024f) : 0),
                     (received > 0 ? received / (1024 * 1024f) : 0)));

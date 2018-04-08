@@ -332,16 +332,9 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> im
         holder.btnClearAccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Util.areYouSure(view.getContext(), R.string.msg_reset_access, new Util.DoubtListener() {
-                    @Override
-                    public void onSure() {
-                        DatabaseHelper.getInstance(context).clearAccess(rule.uid, true);
-                        if (!live)
-                            notifyDataSetChanged();
-                        if (rv != null)
-                            rv.scrollToPosition(holder.getAdapterPosition());
-                    }
-                });
+                DatabaseHelper.getInstance(context).clearAccess(rule.uid, true);
+                if (rv != null)
+                    rv.scrollToPosition(holder.getAdapterPosition());
             }
         });
     }

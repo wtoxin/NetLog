@@ -94,7 +94,7 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Util.setTheme(this);
+        setTheme(R.style.AppThemeBlue);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.logging);
         running = true;
@@ -509,12 +509,12 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                 }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 return true;
 
-            case R.id.menu_log_support:
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setData(Uri.parse("https://github.com/M66B/NetGuard/blob/master/FAQ.md#FAQ27"));
-                if (getPackageManager().resolveActivity(intent, 0) != null)
-                    startActivity(intent);
-                return true;
+//            case R.id.menu_log_support:
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+////                intent.setData(Uri.parse("https://github.com/M66B/NetGuard/blob/master/FAQ.md#FAQ27"));
+//                if (getPackageManager().resolveActivity(intent, 0) != null)
+//                    startActivity(intent);
+//                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
