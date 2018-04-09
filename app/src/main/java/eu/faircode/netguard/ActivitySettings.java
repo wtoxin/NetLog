@@ -114,38 +114,38 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         final PreferenceScreen screen = getPreferenceScreen();
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        PreferenceGroup cat_options = (PreferenceGroup) ((PreferenceGroup) screen.findPreference("screen_options")).findPreference("category_options");
-        PreferenceGroup cat_advanced = (PreferenceGroup) ((PreferenceGroup) screen.findPreference("screen_advanced_options")).findPreference("category_advanced_options");
-        PreferenceGroup cat_stats = (PreferenceGroup) ((PreferenceGroup) screen.findPreference("screen_stats")).findPreference("category_stats");
-        PreferenceGroup cat_backup = (PreferenceGroup) ((PreferenceGroup) screen.findPreference("screen_backup")).findPreference("category_backup");
-
-        // Handle auto enable
-        Preference pref_auto_enable = screen.findPreference("auto_enable");
-        pref_auto_enable.setTitle(getString(R.string.setting_auto, prefs.getString("auto_enable", "0")));
-
-        // Handle screen delay
-        Preference pref_screen_delay = screen.findPreference("screen_delay");
-        pref_screen_delay.setTitle(getString(R.string.setting_delay, prefs.getString("screen_delay", "0")));
-
-        // Wi-Fi home
-        MultiSelectListPreference pref_wifi_homes = (MultiSelectListPreference) screen.findPreference("wifi_homes");
-        Set<String> ssids = prefs.getStringSet("wifi_homes", new HashSet<String>());
-        if (ssids.size() > 0)
-            pref_wifi_homes.setTitle(getString(R.string.setting_wifi_home, TextUtils.join(", ", ssids)));
-        else
-            pref_wifi_homes.setTitle(getString(R.string.setting_wifi_home, "-"));
-
-        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        List<CharSequence> listSSID = new ArrayList<>();
-        List<WifiConfiguration> configs = wm.getConfiguredNetworks();
-        if (configs != null)
-            for (WifiConfiguration config : configs)
-                listSSID.add(config.SSID == null ? "NULL" : config.SSID);
-        for (String ssid : ssids)
-            if (!listSSID.contains(ssid))
-                listSSID.add(ssid);
-        pref_wifi_homes.setEntries(listSSID.toArray(new CharSequence[0]));
-        pref_wifi_homes.setEntryValues(listSSID.toArray(new CharSequence[0]));
+//        PreferenceGroup cat_options = (PreferenceGroup) ((PreferenceGroup) screen.findPreference("screen_options")).findPreference("category_options");
+//        PreferenceGroup cat_advanced = (PreferenceGroup) ((PreferenceGroup) screen.findPreference("screen_advanced_options")).findPreference("category_advanced_options");
+//        PreferenceGroup cat_stats = (PreferenceGroup) ((PreferenceGroup) screen.findPreference("screen_stats")).findPreference("category_stats");
+//        PreferenceGroup cat_backup = (PreferenceGroup) ((PreferenceGroup) screen.findPreference("screen_backup")).findPreference("category_backup");
+//
+//        // Handle auto enable
+//        Preference pref_auto_enable = screen.findPreference("auto_enable");
+//        pref_auto_enable.setTitle(getString(R.string.setting_auto, prefs.getString("auto_enable", "0")));
+//
+//        // Handle screen delay
+//        Preference pref_screen_delay = screen.findPreference("screen_delay");
+//        pref_screen_delay.setTitle(getString(R.string.setting_delay, prefs.getString("screen_delay", "0")));
+//
+//        // Wi-Fi home
+//        MultiSelectListPreference pref_wifi_homes = (MultiSelectListPreference) screen.findPreference("wifi_homes");
+//        Set<String> ssids = prefs.getStringSet("wifi_homes", new HashSet<String>());
+//        if (ssids.size() > 0)
+//            pref_wifi_homes.setTitle(getString(R.string.setting_wifi_home, TextUtils.join(", ", ssids)));
+//        else
+//            pref_wifi_homes.setTitle(getString(R.string.setting_wifi_home, "-"));
+//
+//        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+//        List<CharSequence> listSSID = new ArrayList<>();
+//        List<WifiConfiguration> configs = wm.getConfiguredNetworks();
+//        if (configs != null)
+//            for (WifiConfiguration config : configs)
+//                listSSID.add(config.SSID == null ? "NULL" : config.SSID);
+//        for (String ssid : ssids)
+//            if (!listSSID.contains(ssid))
+//                listSSID.add(ssid);
+//        pref_wifi_homes.setEntries(listSSID.toArray(new CharSequence[0]));
+//        pref_wifi_homes.setEntryValues(listSSID.toArray(new CharSequence[0]));
 
 //        Preference pref_reset_usage = screen.findPreference("reset_usage");
 //        pref_reset_usage.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -179,97 +179,98 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
 //            }
 //        });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            TwoStatePreference pref_reload_onconnectivity =
-                    (TwoStatePreference) screen.findPreference("reload_onconnectivity");
-            pref_reload_onconnectivity.setChecked(true);
-            pref_reload_onconnectivity.setEnabled(false);
-        }
-
-        // VPN parameters
-        screen.findPreference("vpn4").setTitle(getString(R.string.setting_vpn4, prefs.getString("vpn4", "10.1.10.1")));
-        screen.findPreference("vpn6").setTitle(getString(R.string.setting_vpn6, prefs.getString("vpn6", "fd00:1:fd00:1:fd00:1:fd00:1")));
-        EditTextPreference pref_dns1 = (EditTextPreference) screen.findPreference("dns");
-        EditTextPreference pref_dns2 = (EditTextPreference) screen.findPreference("dns2");
-        List<String> def_dns = Util.getDefaultDNS(this);
-        pref_dns1.getEditText().setHint(def_dns.get(0));
-        pref_dns2.getEditText().setHint(def_dns.get(1));
-        pref_dns1.setTitle(getString(R.string.setting_dns, prefs.getString("dns", def_dns.get(0))));
-        pref_dns2.setTitle(getString(R.string.setting_dns, prefs.getString("dns2", def_dns.get(1))));
-
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            TwoStatePreference pref_reload_onconnectivity =
+//                    (TwoStatePreference) screen.findPreference("reload_onconnectivity");
+//            pref_reload_onconnectivity.setChecked(true);
+//            pref_reload_onconnectivity.setEnabled(false);
+//        }
+//
+//        // VPN parameters
+//        screen.findPreference("vpn4").setTitle(getString(R.string.setting_vpn4, prefs.getString("vpn4", "10.1.10.1")));
+//        screen.findPreference("vpn6").setTitle(getString(R.string.setting_vpn6, prefs.getString("vpn6", "fd00:1:fd00:1:fd00:1:fd00:1")));
+//        EditTextPreference pref_dns1 = (EditTextPreference) screen.findPreference("dns");
+//        EditTextPreference pref_dns2 = (EditTextPreference) screen.findPreference("dns2");
+//        List<String> def_dns = Util.getDefaultDNS(this);
+//        pref_dns1.getEditText().setHint(def_dns.get(0));
+//        pref_dns2.getEditText().setHint(def_dns.get(1));
+//        pref_dns1.setTitle(getString(R.string.setting_dns, prefs.getString("dns", def_dns.get(0))));
+//        pref_dns2.setTitle(getString(R.string.setting_dns, prefs.getString("dns2", def_dns.get(1))));
+//
         // PCAP parameters
         screen.findPreference("pcap_record_size").setTitle(getString(R.string.setting_pcap_record_size, prefs.getString("pcap_record_size", "65536")));
         screen.findPreference("pcap_file_size").setTitle(getString(R.string.setting_pcap_file_size, prefs.getString("pcap_file_size", "1024")));
+//
+//        // Watchdog
+//
+//        // Show resolved
+//
+//        // Handle stats
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+//            cat_stats.removePreference(screen.findPreference("show_top"));
+//        EditTextPreference pref_stats_frequency = (EditTextPreference) screen.findPreference("stats_frequency");
+//        EditTextPreference pref_stats_samples = (EditTextPreference) screen.findPreference("stats_samples");
+//        pref_stats_frequency.setTitle(getString(R.string.setting_stats_frequency, prefs.getString("stats_frequency", "1000")));
+//        pref_stats_samples.setTitle(getString(R.string.setting_stats_samples, prefs.getString("stats_samples", "90")));
+//
+//        // Handle export
+//        Preference pref_export = screen.findPreference("export");
+//        pref_export.setEnabled(getIntentCreateExport().resolveActivity(getPackageManager()) != null);
+//        pref_export.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                startActivityForResult(getIntentCreateExport(), ActivitySettings.REQUEST_EXPORT);
+//                return true;
+//            }
+//        });
+//
+//        // Handle import
+//        Preference pref_import = screen.findPreference("import");
+//        pref_import.setEnabled(getIntentOpenExport().resolveActivity(getPackageManager()) != null);
+//        pref_import.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                startActivityForResult(getIntentOpenExport(), ActivitySettings.REQUEST_IMPORT);
+//                return true;
+//            }
+//        });
+//
+//
+//        // Development
+//        if (!Util.isDebuggable(this))
+//            screen.removePreference(screen.findPreference("screen_development"));
+//
+//        // Handle technical info
+//        Preference.OnPreferenceClickListener listener = new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                updateTechnicalInfo();
+//                return true;
+//            }
+//        };
+//
+//        // Technical info
+//        Preference pref_technical_info = screen.findPreference("technical_info");
+//        Preference pref_technical_network = screen.findPreference("technical_network");
+//        pref_technical_info.setEnabled(INTENT_VPN_SETTINGS.resolveActivity(this.getPackageManager()) != null);
+//        pref_technical_info.setIntent(INTENT_VPN_SETTINGS);
+//        pref_technical_info.setOnPreferenceClickListener(listener);
+//        pref_technical_network.setOnPreferenceClickListener(listener);
+//        updateTechnicalInfo();
 
-        // Watchdog
 
-        // Show resolved
-
-        // Handle stats
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            cat_stats.removePreference(screen.findPreference("show_top"));
-        EditTextPreference pref_stats_frequency = (EditTextPreference) screen.findPreference("stats_frequency");
-        EditTextPreference pref_stats_samples = (EditTextPreference) screen.findPreference("stats_samples");
-        pref_stats_frequency.setTitle(getString(R.string.setting_stats_frequency, prefs.getString("stats_frequency", "1000")));
-        pref_stats_samples.setTitle(getString(R.string.setting_stats_samples, prefs.getString("stats_samples", "90")));
-
-        // Handle export
-        Preference pref_export = screen.findPreference("export");
-        pref_export.setEnabled(getIntentCreateExport().resolveActivity(getPackageManager()) != null);
-        pref_export.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivityForResult(getIntentCreateExport(), ActivitySettings.REQUEST_EXPORT);
-                return true;
-            }
-        });
-
-        // Handle import
-        Preference pref_import = screen.findPreference("import");
-        pref_import.setEnabled(getIntentOpenExport().resolveActivity(getPackageManager()) != null);
-        pref_import.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivityForResult(getIntentOpenExport(), ActivitySettings.REQUEST_IMPORT);
-                return true;
-            }
-        });
-
-
-        // Development
-        if (!Util.isDebuggable(this))
-            screen.removePreference(screen.findPreference("screen_development"));
-
-        // Handle technical info
-        Preference.OnPreferenceClickListener listener = new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                updateTechnicalInfo();
-                return true;
-            }
-        };
-
-        // Technical info
-        Preference pref_technical_info = screen.findPreference("technical_info");
-        Preference pref_technical_network = screen.findPreference("technical_network");
-        pref_technical_info.setEnabled(INTENT_VPN_SETTINGS.resolveActivity(this.getPackageManager()) != null);
-        pref_technical_info.setIntent(INTENT_VPN_SETTINGS);
-        pref_technical_info.setOnPreferenceClickListener(listener);
-        pref_technical_network.setOnPreferenceClickListener(listener);
-        updateTechnicalInfo();
-
-
-        disableSetting("screen_defaults");
-        disableSetting("screen_options");
-        disableSetting("screen_network_options");
-        disableSetting("screen_stats");
-        disableSetting("screen_backup");
-        disableSetting("screen_development");
-        disableSetting("screen_technical");
-        disableSetting("vpn4");
-        disableSetting("vpn6");
-        disableSetting("dns");
-        disableSetting("dns2");
+//        disableSetting("screen_defaults");
+//        disableSetting("screen_options");
+//        disableSetting("screen_network_options");
+//        disableSetting("screen_advanced_options");
+//        disableSetting("screen_stats");
+//        disableSetting("screen_backup");
+//        disableSetting("screen_development");
+//        disableSetting("screen_technical");
+//        disableSetting("vpn4");
+//        disableSetting("vpn6");
+//        disableSetting("dns");
+//        disableSetting("dns2");
 
         screen.removePreference(screen.findPreference("screen_defaults"));
         screen.removePreference(screen.findPreference("screen_options"));
