@@ -33,7 +33,7 @@
 #include <android/log.h>
 #include <sys/system_properties.h>
 
-#define TAG "NetGuard.JNI"
+#define TAG "NetLog.JNI"
 
 // #define PROFILE_JNI 5
 

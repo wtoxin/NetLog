@@ -52,16 +52,16 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         return -1;
     }
 
-    const char *packet = "eu/faircode/netguard/Packet";
+    const char *packet = "edu/nudt/netlog/Packet";
     clsPacket = jniGlobalRef(env, jniFindClass(env, packet));
 
-    const char *allowed = "eu/faircode/netguard/Allowed";
+    const char *allowed = "edu/nudt/netlog/Allowed";
     clsAllowed = jniGlobalRef(env, jniFindClass(env, allowed));
 
-    const char *rr = "eu/faircode/netguard/ResourceRecord";
+    const char *rr = "edu/nudt/netlog/ResourceRecord";
     clsRR = jniGlobalRef(env, jniFindClass(env, rr));
 
-    const char *usage = "eu/faircode/netguard/Usage";
+    const char *usage = "edu/nudt/netlog/Usage";
     clsUsage = jniGlobalRef(env, jniFindClass(env, usage));
 
     // Raise file number limit to maximum
@@ -95,7 +95,7 @@ void JNI_OnUnload(JavaVM *vm, void *reserved) {
 // JNI ServiceSinkhole
 
 JNIEXPORT jlong JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1init(
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1init(
         JNIEnv *env, jobject instance, jint sdk) {
     struct context *ctx = calloc(1, sizeof(struct context));
     ctx->sdk = sdk;
@@ -126,7 +126,7 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1init(
 }
 
 JNIEXPORT void JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1start(
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1start(
         JNIEnv *env, jobject instance, jlong context, jint loglevel_) {
     struct context *ctx = (struct context *) context;
 
@@ -139,7 +139,7 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1start(
 }
 
 JNIEXPORT void JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1run(
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1run(
         JNIEnv *env, jobject instance, jlong context, jint tun, jboolean fwd53, jint rcode) {
     struct context *ctx = (struct context *) context;
 
@@ -163,7 +163,7 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1run(
 }
 
 JNIEXPORT void JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1stop(
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1stop(
         JNIEnv *env, jobject instance, jlong context) {
     struct context *ctx = (struct context *) context;
     ctx->stopping = 1;
@@ -174,19 +174,19 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1stop(
 }
 
 JNIEXPORT void JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1clear(
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1clear(
         JNIEnv *env, jobject instance, jlong context) {
     struct context *ctx = (struct context *) context;
     clear(ctx);
 }
 
 JNIEXPORT jint JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1get_1mtu(JNIEnv *env, jobject instance) {
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1get_1mtu(JNIEnv *env, jobject instance) {
     return get_mtu();
 }
 
 JNIEXPORT jintArray JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1get_1stats(
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1get_1stats(
         JNIEnv *env, jobject instance, jlong context) {
     struct context *ctx = (struct context *) context;
 
@@ -234,7 +234,7 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1get_1stats(
 }
 
 JNIEXPORT void JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1pcap(
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1pcap(
         JNIEnv *env, jclass type,
         jstring name_, jint record_size, jint file_size) {
 
@@ -290,7 +290,7 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1pcap(
 }
 
 JNIEXPORT void JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1socks5(JNIEnv *env, jobject instance, jstring addr_,
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1socks5(JNIEnv *env, jobject instance, jstring addr_,
                                                       jint port, jstring username_,
                                                       jstring password_) {
     const char *addr = (*env)->GetStringUTFChars(env, addr_, 0);
@@ -311,7 +311,7 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1socks5(JNIEnv *env, jobject insta
 }
 
 JNIEXPORT void JNICALL
-Java_eu_faircode_netguard_ServiceSinkhole_jni_1done(
+Java_edu_nudt_netlog_ServiceSinkhole_jni_1done(
         JNIEnv *env, jobject instance, jlong context) {
     struct context *ctx = (struct context *) context;
     log_android(ANDROID_LOG_INFO, "Done");
@@ -331,7 +331,7 @@ Java_eu_faircode_netguard_ServiceSinkhole_jni_1done(
 // JNI Util
 
 JNIEXPORT jstring JNICALL
-Java_eu_faircode_netguard_Util_jni_1getprop(JNIEnv *env, jclass type, jstring name_) {
+Java_edu_nudt_netlog_Util_jni_1getprop(JNIEnv *env, jclass type, jstring name_) {
     const char *name = (*env)->GetStringUTFChars(env, name_, 0);
 
     char value[PROP_VALUE_MAX + 1] = "";
@@ -343,7 +343,7 @@ Java_eu_faircode_netguard_Util_jni_1getprop(JNIEnv *env, jclass type, jstring na
 }
 
 JNIEXPORT jboolean JNICALL
-Java_eu_faircode_netguard_Util_is_1numeric_1address(JNIEnv *env, jclass type, jstring ip_) {
+Java_edu_nudt_netlog_Util_is_1numeric_1address(JNIEnv *env, jclass type, jstring ip_) {
     jboolean numeric = 0;
     const char *ip = (*env)->GetStringUTFChars(env, ip_, 0);
 
@@ -505,7 +505,7 @@ void log_packet(const struct arguments *args, jobject jpacket) {
 
     jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
 
-    const char *signature = "(Leu/faircode/netguard/Packet;)V";
+    const char *signature = "(Ledu/nudt/netlog/Packet;)V";
     if (midLogPacket == NULL)
         midLogPacket = jniGetMethodID(args->env, clsService, "logPacket", signature);
 
@@ -542,11 +542,11 @@ void dns_resolved(const struct arguments *args,
 
     jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
 
-    const char *signature = "(Leu/faircode/netguard/ResourceRecord;)V";
+    const char *signature = "(Ledu/nudt/netlog/ResourceRecord;)V";
     if (midDnsResolved == NULL)
         midDnsResolved = jniGetMethodID(args->env, clsService, "dnsResolved", signature);
 
-    const char *rr = "eu/faircode/netguard/ResourceRecord";
+    const char *rr = "edu/nudt/netlog/ResourceRecord";
     if (midInitRR == NULL)
         midInitRR = jniGetMethodID(args->env, clsRR, "<init>", "()V");
 
@@ -639,7 +639,7 @@ struct allowed *is_address_allowed(const struct arguments *args, jobject jpacket
 
     jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
 
-    const char *signature = "(Leu/faircode/netguard/Packet;)Leu/faircode/netguard/Allowed;";
+    const char *signature = "(Ledu/nudt/netlog/Packet;)Ledu/nudt/netlog/Allowed;";
     if (midIsAddressAllowed == NULL)
         midIsAddressAllowed = jniGetMethodID(args->env, clsService, "isAddressAllowed", signature);
 
@@ -722,7 +722,7 @@ jobject create_packet(const struct arguments *args,
         env->SetByteArrayRegion (ret, 0, 3, b);
      */
 
-    const char *packet = "eu/faircode/netguard/Packet";
+    const char *packet = "edu/nudt/netlog/Packet";
     if (midInitPacket == NULL)
         midInitPacket = jniGetMethodID(env, clsPacket, "<init>", "()V");
     jobject jpacket = jniNewObject(env, clsPacket, midInitPacket, packet);
@@ -800,11 +800,11 @@ void account_usage(const struct arguments *args, jint version, jint protocol,
 
     jclass clsService = (*args->env)->GetObjectClass(args->env, args->instance);
 
-    const char *signature = "(Leu/faircode/netguard/Usage;)V";
+    const char *signature = "(Ledu/nudt/netlog/Usage;)V";
     if (midAccountUsage == NULL)
         midAccountUsage = jniGetMethodID(args->env, clsService, "accountUsage", signature);
 
-    const char *usage = "eu/faircode/netguard/Usage";
+    const char *usage = "edu/nudt/netlog/Usage";
     if (midInitUsage == NULL)
         midInitUsage = jniGetMethodID(args->env, clsUsage, "<init>", "()V");
 

@@ -20,8 +20,8 @@
 #-renamesourcefileattribute SourceFile
 #-keepattributes SourceFile,LineNumberTable
 
-#NetGuard
--keepnames class eu.faircode.netguard.** { *; }
+#NetLog
+-keepnames class edu.nudt.netlog.** { *; }
 
 #JNI
 -keepclasseswithmembernames class * {
@@ -29,18 +29,18 @@
 }
 
 #JNI callbacks
--keep class eu.faircode.netguard.Allowed { *; }
--keep class eu.faircode.netguard.Packet { *; }
--keep class eu.faircode.netguard.ResourceRecord { *; }
--keep class eu.faircode.netguard.Usage { *; }
--keep class eu.faircode.netguard.ServiceSinkhole {
+-keep class edu.nudt.netlog.Allowed { *; }
+-keep class edu.nudt.netlog.Packet { *; }
+-keep class edu.nudt.netlog.ResourceRecord { *; }
+-keep class edu.nudt.netlog.Usage { *; }
+-keep class edu.nudt.netlog.ServiceSinkhole {
     void nativeExit(java.lang.String);
     void nativeError(int, java.lang.String);
-    void logPacket(eu.faircode.netguard.Packet);
-    void dnsResolved(eu.faircode.netguard.ResourceRecord);
+    void logPacket(edu.nudt.netlog.Packet);
+    void dnsResolved(edu.nudt.netlog.ResourceRecord);
     boolean isDomainBlocked(java.lang.String);
-    eu.faircode.netguard.Allowed isAddressAllowed(eu.faircode.netguard.Packet);
-    void accountUsage(eu.faircode.netguard.Usage);
+    edu.nudt.netlog.Allowed isAddressAllowed(edu.nudt.netlog.Packet);
+    void accountUsage(edu.nudt.netlog.Usage);
 }
 
 #Support library

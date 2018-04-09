@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.faircode.netguard.DatabaseHelper;
-import eu.faircode.netguard.FilterObject;
-import eu.faircode.netguard.Util;
+import edu.nudt.netlog.DatabaseHelper;
+import edu.nudt.netlog.FilterObject;
+import edu.nudt.netlog.Util;
 
 /**
  * Created by techartisan on 30/03/2018.

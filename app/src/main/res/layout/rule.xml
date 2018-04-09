@@ -163,7 +163,7 @@
                     android:src="?attr/iconDelete" />
             </LinearLayout>
 
-            <eu.faircode.netguard.ExpandedListView
+            <edu.nudt.netlog.ExpandedListView
                 android:id="@+id/lvAccess"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

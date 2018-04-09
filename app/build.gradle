@@ -6,7 +6,7 @@ android {
     buildToolsVersion = "27.0.3"
 
     defaultConfig {
-        applicationId = "eu.faircode.netguard"
+        applicationId = "edu.nudt.netlog"
         versionName = "0.9"
         minSdkVersion 22
         targetSdkVersion 27
