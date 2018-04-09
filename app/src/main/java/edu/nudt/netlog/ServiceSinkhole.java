@@ -101,7 +101,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ServiceSinkhole extends VpnService implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = "NetGuard.Service";
+    private static final String TAG = "NetLog.Service";
 
     private boolean registeredUser = false;
     private boolean registeredIdleState = false;
@@ -179,9 +179,9 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
     private ExecutorService executor = Executors.newCachedThreadPool();
 
-    private static final String ACTION_HOUSE_HOLDING = "eu.faircode.netguard.HOUSE_HOLDING";
-    private static final String ACTION_SCREEN_OFF_DELAYED = "eu.faircode.netguard.SCREEN_OFF_DELAYED";
-    private static final String ACTION_WATCHDOG = "eu.faircode.netguard.WATCHDOG";
+    private static final String ACTION_HOUSE_HOLDING = "HOUSE_HOLDING";
+    private static final String ACTION_SCREEN_OFF_DELAYED = "SCREEN_OFF_DELAYED";
+    private static final String ACTION_WATCHDOG = "WATCHDOG";
 
     private native long jni_init(int sdk);
 
@@ -411,9 +411,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
                     ruleset.putExtra(ActivityMain.EXTRA_CONNECTED, cmd == Command.stop ? false : last_connected);
                     ruleset.putExtra(ActivityMain.EXTRA_METERED, cmd == Command.stop ? false : last_metered);
                     LocalBroadcastManager.getInstance(ServiceSinkhole.this).sendBroadcast(ruleset);
-
-                    // Update widgets
-                    WidgetMain.updateWidgets(ServiceSinkhole.this);
                 }
 
                 // Stop service if needed
@@ -441,7 +438,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
                         // Disable firewall
                         if (!(ex instanceof StartFailedException)) {
                             prefs.edit().putBoolean("enabled", false).apply();
-                            WidgetMain.updateWidgets(ServiceSinkhole.this);
                         }
                     }
                 } else
@@ -1548,7 +1544,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             prefs.edit().putBoolean("enabled", false).apply();
-            WidgetMain.updateWidgets(this);
         }
     }
 
@@ -2315,7 +2310,6 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
         // Feedback
         showDisabledNotification();
-        WidgetMain.updateWidgets(this);
 
         super.onRevoke();
     }

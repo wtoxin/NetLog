@@ -7,10 +7,10 @@ android {
 
     defaultConfig {
         applicationId = "edu.nudt.netlog"
-        versionName = "0.9"
+        versionName = "1.0"
         minSdkVersion 22
         targetSdkVersion 27
-        versionCode = 2018040801
+        versionCode = 2018040901
         archivesBaseName = "NetLog-v$versionName"
 
         externalNativeBuild {

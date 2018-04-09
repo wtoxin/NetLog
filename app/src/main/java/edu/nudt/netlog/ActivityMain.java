@@ -64,7 +64,7 @@ import android.widget.Toast;
 import java.util.List;
 
 public class ActivityMain extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = "NetGuard.Main";
+    private static final String TAG = "NetLog.Main";
 
     private boolean running = false;
     private ImageView ivIcon;
@@ -87,8 +87,8 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
 
     private static final int MIN_SDK = Build.VERSION_CODES.LOLLIPOP_MR1;
 
-    public static final String ACTION_RULES_CHANGED = "eu.faircode.netguard.ACTION_RULES_CHANGED";
-    public static final String ACTION_QUEUE_CHANGED = "eu.faircode.netguard.ACTION_QUEUE_CHANGED";
+    public static final String ACTION_RULES_CHANGED = "ACTION_RULES_CHANGED";
+    public static final String ACTION_QUEUE_CHANGED = "ACTION_QUEUE_CHANGED";
     public static final String EXTRA_REFRESH = "Refresh";
     public static final String EXTRA_SEARCH = "Search";
     public static final String EXTRA_RELATED = "Related";
@@ -235,18 +235,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         });
 
         // Hint system applications
-        final LinearLayout llSystem = findViewById(R.id.llSystem);
-        Button btnSystem = findViewById(R.id.btnSystem);
-        boolean system = prefs.getBoolean("manage_system", false);
-        boolean hintSystem = prefs.getBoolean("hint_system", true);
-        llSystem.setVisibility(!system && hintSystem ? View.VISIBLE : View.GONE);
-        btnSystem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                prefs.edit().putBoolean("hint_system", false).apply();
-                llSystem.setVisibility(View.GONE);
-            }
-        });
 
         // Listen for preference changes
         prefs.registerOnSharedPreferenceChangeListener(this);

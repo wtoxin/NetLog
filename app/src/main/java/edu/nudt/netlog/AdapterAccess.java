@@ -117,15 +117,6 @@ public class AdapterAccess extends CursorAdapter {
 
         // Set values
         tvTime.setText(new SimpleDateFormat("dd HH:mm").format(time));
-        if (block < 0)
-            ivBlock.setImageDrawable(null);
-        else {
-            ivBlock.setImageResource(block > 0 ? R.drawable.host_blocked : R.drawable.host_allowed);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                Drawable wrap = DrawableCompat.wrap(ivBlock.getDrawable());
-                DrawableCompat.setTint(wrap, block > 0 ? colorOff : colorOn);
-            }
-        }
 
         String dest = Util.getProtocolName(protocol, version, false) +
                 " " + daddr + (dport > 0 ? "/" + dport : "");
@@ -152,18 +143,13 @@ public class AdapterAccess extends CursorAdapter {
                 @Override
                 protected void onPostExecute(String addr) {
                     tvDest.setText(
-                            Util.getProtocolName(protocol, version, true) +
-                                    " >" + addr + (dport > 0 ? "/" + dport : ""));
+                            Util.getProtocolName(protocol, version, false) +
+                                    "  " + addr + (dport > 0 ? "/" + dport : ""));
                     ViewCompat.setHasTransientState(tvDest, false);
                 }
             }.execute(daddr);
 
-        if (allowed < 0)
-            tvDest.setTextColor(colorText);
-        else if (allowed > 0)
-            tvDest.setTextColor(colorOn);
-        else
-            tvDest.setTextColor(colorOff);
+        tvDest.setTextColor(colorOn);
 
         llTraffic.setVisibility(connections > 0 || sent > 0 || received > 0 ? View.VISIBLE : View.GONE);
         if (connections > 0)

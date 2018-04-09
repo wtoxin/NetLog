@@ -389,9 +389,6 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
         menu.findItem(R.id.menu_protocol_udp).setChecked(prefs.getBoolean("proto_udp", true));
         menu.findItem(R.id.menu_protocol_tcp).setChecked(prefs.getBoolean("proto_tcp", true));
         menu.findItem(R.id.menu_protocol_other).setChecked(prefs.getBoolean("proto_other", true));
-        menu.findItem(R.id.menu_traffic_allowed).setEnabled(true);
-        menu.findItem(R.id.menu_traffic_allowed).setChecked(prefs.getBoolean("traffic_allowed", true));
-        menu.findItem(R.id.menu_traffic_blocked).setChecked(prefs.getBoolean("traffic_blocked", true));
 
         menu.findItem(R.id.menu_refresh).setEnabled(!menu.findItem(R.id.menu_log_live).isChecked());
         menu.findItem(R.id.menu_log_resolve).setChecked(prefs.getBoolean("resolve", false));
@@ -428,18 +425,6 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
             case R.id.menu_protocol_other:
                 item.setChecked(!item.isChecked());
                 prefs.edit().putBoolean("proto_other", item.isChecked()).apply();
-                updateAdapter();
-                return true;
-
-            case R.id.menu_traffic_allowed:
-                item.setChecked(!item.isChecked());
-                prefs.edit().putBoolean("traffic_allowed", item.isChecked()).apply();
-                updateAdapter();
-                return true;
-
-            case R.id.menu_traffic_blocked:
-                item.setChecked(!item.isChecked());
-                prefs.edit().putBoolean("traffic_blocked", item.isChecked()).apply();
                 updateAdapter();
                 return true;
 

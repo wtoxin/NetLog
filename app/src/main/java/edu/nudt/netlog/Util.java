@@ -589,7 +589,7 @@ public class Util {
         }
         if (p == null)
             return Integer.toString(protocol) + "/" + version;
-        return ((brief ? b : p) + (version > 0 ? version : ""));
+        return (brief ? b : p);
     }
 
     public interface DoubtListener {

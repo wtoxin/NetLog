@@ -26,14 +26,6 @@
                 android:id="@+id/menu_protocol_other"
                 android:checkable="true"
                 android:title="@string/menu_protocol_other" />
-            <item
-                android:id="@+id/menu_traffic_allowed"
-                android:checkable="true"
-                android:title="@string/menu_traffic_allowed" />
-            <item
-                android:id="@+id/menu_traffic_blocked"
-                android:checkable="true"
-                android:title="@string/menu_traffic_blocked" />
         </menu>
     </item>
 
