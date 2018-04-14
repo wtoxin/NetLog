@@ -44,7 +44,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Rule {
-    private static final String TAG = "NetGuard.Rule";
+    private static final String TAG = "NetLog.Rule";
 
     public int uid;
     public String packageName;
@@ -200,8 +200,8 @@ public class Rule {
             SharedPreferences notify = context.getSharedPreferences("notify", Context.MODE_PRIVATE);
 
             // Get settings
-            boolean default_wifi = prefs.getBoolean("whitelist_wifi", true);
-            boolean default_other = prefs.getBoolean("whitelist_other", true);
+            boolean default_wifi = prefs.getBoolean("whitelist_wifi", false);
+            boolean default_other = prefs.getBoolean("whitelist_other", false);
             boolean default_screen_wifi = prefs.getBoolean("screen_wifi", false);
             boolean default_screen_other = prefs.getBoolean("screen_other", false);
             boolean default_roaming = prefs.getBoolean("whitelist_roaming", true);
@@ -404,8 +404,8 @@ public class Rule {
     public void updateChanged(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean screen_on = prefs.getBoolean("screen_on", false);
-        boolean default_wifi = prefs.getBoolean("whitelist_wifi", true) && screen_on;
-        boolean default_other = prefs.getBoolean("whitelist_other", true) && screen_on;
+        boolean default_wifi = prefs.getBoolean("whitelist_wifi", false) && screen_on;
+        boolean default_other = prefs.getBoolean("whitelist_other", false) && screen_on;
         boolean default_roaming = prefs.getBoolean("whitelist_roaming", true);
         updateChanged(default_wifi, default_other, default_roaming);
     }

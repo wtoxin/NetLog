@@ -135,21 +135,5 @@
             </intent-filter>
         </service>
 
-        <receiver
-            android:name="edu.nudt.netlog.ReceiverAutostart"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="edu.nudt.netlog.ReceiverPackageRemoved">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
     </application>
 </manifest>

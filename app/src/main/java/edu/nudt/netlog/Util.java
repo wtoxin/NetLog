@@ -85,7 +85,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Util {
-    private static final String TAG = "NetGuard.Util";
+    private static final String TAG = "NetLog.Util";
 
     // Roam like at home
     private static final List<String> listEU = Arrays.asList(
@@ -493,27 +493,6 @@ public class Util {
         String calculated = getFingerprint(context);
         String expected = context.getString(R.string.fingerprint);
         return (calculated != null && calculated.equals(expected));
-    }
-
-    public static void setTheme(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean dark = prefs.getBoolean("dark_theme", false);
-        String theme = prefs.getString("theme", "teal");
-        if (theme.equals("teal"))
-            context.setTheme(dark ? R.style.AppThemeTealDark : R.style.AppThemeTeal);
-        else if (theme.equals("blue"))
-            context.setTheme(dark ? R.style.AppThemeBlueDark : R.style.AppThemeBlue);
-        else if (theme.equals("purple"))
-            context.setTheme(dark ? R.style.AppThemePurpleDark : R.style.AppThemePurple);
-        else if (theme.equals("amber"))
-            context.setTheme(dark ? R.style.AppThemeAmberDark : R.style.AppThemeAmber);
-        else if (theme.equals("orange"))
-            context.setTheme(dark ? R.style.AppThemeOrangeDark : R.style.AppThemeOrange);
-        else if (theme.equals("green"))
-            context.setTheme(dark ? R.style.AppThemeGreenDark : R.style.AppThemeGreen);
-
-        if (context instanceof Activity && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            setTaskColor(context);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

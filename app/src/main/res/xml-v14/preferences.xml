@@ -20,11 +20,11 @@
             android:key="category_defaults"
             android:title="@string/setting_defaults">
             <CheckBoxPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:key="whitelist_wifi"
                 android:title="@string/setting_whitelist_wifi" />
             <CheckBoxPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:key="whitelist_other"
                 android:title="@string/setting_whitelist_other" />
             <CheckBoxPreference

@@ -102,8 +102,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         boolean enabled = prefs.getBoolean("enabled", false);
         boolean initialized = prefs.getBoolean("initialized", false);
 
-        // Upgrade
-        ReceiverAutostart.upgrade(initialized, this);
 
         if (!getIntent().hasExtra(EXTRA_APPROVE)) {
             if (enabled)
@@ -233,47 +231,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         intentFilter.addDataScheme("package");
         registerReceiver(packageChangedReceiver, intentFilter);
-
-//        // First use
-//        if (!initialized) {
-//            // Create view
-//            LayoutInflater inflater = LayoutInflater.from(this);
-//            View view = inflater.inflate(R.layout.first, null, false);
-//
-//            TextView tvFirst = view.findViewById(R.id.tvFirst);
-//            TextView tvPrivacy = view.findViewById(R.id.tvPrivacy);
-//            tvFirst.setMovementMethod(LinkMovementMethod.getInstance());
-//            tvPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
-//
-//            // Show dialog
-//            dialogFirst = new AlertDialog.Builder(this)
-//                    .setView(view)
-//                    .setCancelable(false)
-//                    .setPositiveButton(R.string.app_agree, new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            if (running) {
-//                                prefs.edit().putBoolean("initialized", true).apply();
-//                                prefs.edit().putBoolean("admob", true).apply();
-//                            }
-//                        }
-//                    })
-//                    .setNegativeButton(R.string.app_disagree, new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            if (running)
-//                                finish();
-//                        }
-//                    })
-//                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                        @Override
-//                        public void onDismiss(DialogInterface dialogInterface) {
-//                            dialogFirst = null;
-//                        }
-//                    })
-//                    .create();
-//            dialogFirst.show();
-//        }
 
         // Fill application list
         updateApplicationList(getIntent().getStringExtra(EXTRA_SEARCH));
@@ -460,13 +417,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             invalidateOptionsMenu();
             updateApplicationList(null);
 
-            LinearLayout llSystem = findViewById(R.id.llSystem);
-            boolean system = prefs.getBoolean("manage_system", false);
-            boolean hint = prefs.getBoolean("hint_system", true);
-            llSystem.setVisibility(!system && hint ? View.VISIBLE : View.GONE);
-
-        } else if ("theme".equals(name) || "dark_theme".equals(name))
-            recreate();
+        }
     }
 
     private DatabaseHelper.AccessChangedListener accessChangedListener = new DatabaseHelper.AccessChangedListener() {

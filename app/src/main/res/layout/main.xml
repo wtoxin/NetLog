@@ -41,33 +41,6 @@
                 android:scrollbars="vertical" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
-        <LinearLayout
-            android:id="@+id/llSystem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/msg_system"
-                android:textAppearance="@style/TextSmall" />
-
-            <Button
-                android:id="@+id/btnSystem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:text="@android:string/ok"
-                android:textAppearance="@style/TextSmall" />
-        </LinearLayout>
-
     </LinearLayout>
 
 </RelativeLayout>

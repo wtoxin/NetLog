@@ -20,11 +20,11 @@
             android:key="category_defaults"
             android:title="@string/setting_defaults">
             <edu.nudt.netlog.SwitchPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:key="whitelist_wifi"
                 android:title="@string/setting_whitelist_wifi" />
             <edu.nudt.netlog.SwitchPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:key="whitelist_other"
                 android:title="@string/setting_whitelist_other" />
             <edu.nudt.netlog.SwitchPreference

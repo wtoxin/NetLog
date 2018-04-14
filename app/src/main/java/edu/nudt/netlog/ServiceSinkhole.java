@@ -1,24 +1,5 @@
 package edu.nudt.netlog;
 
-/*
-    This file is part of NetGuard.
-
-    NetGuard is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    NetGuard is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with NetGuard.  If not, see <http://www.gnu.org/licenses/>.
-
-    Copyright 2015-2018 by Marcel Bokhorst (M66B)
-*/
-
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -2007,8 +1988,8 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
             // Get defaults
             SharedPreferences prefs_wifi = getSharedPreferences("wifi", Context.MODE_PRIVATE);
             SharedPreferences prefs_other = getSharedPreferences("other", Context.MODE_PRIVATE);
-            boolean wifi = prefs_wifi.getBoolean(packages[0], prefs.getBoolean("whitelist_wifi", true));
-            boolean other = prefs_other.getBoolean(packages[0], prefs.getBoolean("whitelist_other", true));
+            boolean wifi = prefs_wifi.getBoolean(packages[0], prefs.getBoolean("whitelist_wifi", false));
+            boolean other = prefs_other.getBoolean(packages[0], prefs.getBoolean("whitelist_other", false));
 
             // Build Wi-Fi action
             Intent riWifi = new Intent(this, ServiceSinkhole.class);
@@ -2279,8 +2260,8 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
         // Get defaults
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(ServiceSinkhole.this);
-        boolean default_wifi = settings.getBoolean("whitelist_wifi", true);
-        boolean default_other = settings.getBoolean("whitelist_other", true);
+        boolean default_wifi = settings.getBoolean("whitelist_wifi", false);
+        boolean default_other = settings.getBoolean("whitelist_other", false);
 
         // Update setting
         SharedPreferences prefs = getSharedPreferences(network, Context.MODE_PRIVATE);
