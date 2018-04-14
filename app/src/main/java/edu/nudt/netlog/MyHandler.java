@@ -1,4 +1,4 @@
-package anormals;
+package edu.nudt.netlog;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,13 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.nudt.netlog.DatabaseHelper;
-import edu.nudt.netlog.FilterObject;
-import edu.nudt.netlog.Util;
-
-/**
- * Created by techartisan on 30/03/2018.
- */
 
 public class MyHandler {
     public static void handleFile(Context activityLog, OutputStream out2, OutputStream out3) throws IOException {
@@ -77,3 +70,4 @@ public class MyHandler {
         }
     }
 }
+

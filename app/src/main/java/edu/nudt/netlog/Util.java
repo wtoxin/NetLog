@@ -596,29 +596,6 @@ public class Util {
         void onSure();
     }
 
-    public static void areYouSure(Context context, int explanation, final DoubtListener listener) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.sure, null, false);
-        TextView tvExplanation = view.findViewById(R.id.tvExplanation);
-        tvExplanation.setText(explanation);
-        new AlertDialog.Builder(context)
-                .setView(view)
-                .setCancelable(true)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listener.onSure();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing
-                    }
-                })
-                .create().show();
-    }
-
     private static final Map<String, String> mapIPOrganization = new HashMap<>();
 
     public static String getOrganization(String ip) throws Exception {

@@ -1,8 +1,5 @@
 package edu.nudt.netlog
 
-/**
- * Created by techartisan on 30/03/2018.
- */
 
 class FilterObject {
     var app = ""
