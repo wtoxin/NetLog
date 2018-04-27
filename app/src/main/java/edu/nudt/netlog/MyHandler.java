@@ -2,6 +2,7 @@ package edu.nudt.netlog;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,7 +15,6 @@ import java.util.Map;
 
 public class MyHandler {
     public static void handleFile(Context activityLog, OutputStream out2, OutputStream out3) throws IOException {
-
         Cursor cursor = DatabaseHelper.getInstance(activityLog).getLog(true, true, true, true, false);
         int colTime = cursor.getColumnIndex("time");
         int colVersion = cursor.getColumnIndex("version");

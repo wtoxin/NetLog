@@ -634,6 +634,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
 
             // Traffic log
             if (log)
+                // JQ Mark, insert log into database
                 dh.insertLog(packet, dname, connection, interactive);
 
             // Application log
@@ -1235,6 +1236,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
             int prio = Integer.parseInt(prefs.getString("loglevel", Integer.toString(Log.WARN)));
             final int rcode = 3;
 
+            // JQ Mark, use here to connect to a socks 5 proxy
             jni_socks5("", 0, "", "");
 
             if (tunnelThread == null) {

@@ -134,6 +134,11 @@
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
+        <service
+            android:name="edu.nudt.netlog.TimerService">
+        </service>
+        <receiver android:name="edu.nudt.netlog.AlarmReceiver"></receiver>
+
 
     </application>
 </manifest>

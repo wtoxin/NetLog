@@ -28,6 +28,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+
 public class AdapterLog extends CursorAdapter {
     private static String TAG = "NetLog.Log";
 

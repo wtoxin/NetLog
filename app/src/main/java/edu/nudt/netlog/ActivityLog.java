@@ -2,8 +2,12 @@ package edu.nudt.netlog;
 
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,6 +19,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
@@ -42,6 +47,9 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Activity for log panel
+ */
 public class ActivityLog extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "NetLog.Log";
 
@@ -434,28 +442,7 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                 return true;
 
             case R.id.menu_log_clear:
-                new AsyncTask<Object, Object, Object>() {
-                    @Override
-                    protected Object doInBackground(Object... objects) {
-                        DatabaseHelper.getInstance(ActivityLog.this).clearLog(-1);
-                        if (true) {
-                            ServiceSinkhole.setPcap(false, ActivityLog.this);
-                            if (pcap_file.exists() && !pcap_file.delete())
-                                Log.w(TAG, "Delete PCAP failed");
-                            ServiceSinkhole.setPcap(true, ActivityLog.this);
-                        } else {
-                            if (pcap_file.exists() && !pcap_file.delete())
-                                Log.w(TAG, "Delete PCAP failed");
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Object result) {
-                        if (running)
-                            updateAdapter();
-                    }
-                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                clear(pcap_file);
                 return true;
 
 //            case R.id.menu_log_support:
@@ -526,7 +513,8 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                 OutputStream out2 = null;
                 OutputStream out3 = null;
                 FileInputStream in = null;
-                String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/netlog"+System.currentTimeMillis()+".pcap";
+                // JQ Mod, modification according to directory change.
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+System.currentTimeMillis()+".pcap";
                 String path_log = path.replace(".pcap", "_log.txt");
                 String path_filter = path.replace(".pcap", "_filter.txt");
 
@@ -603,6 +591,35 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
                     Toast.makeText(ActivityLog.this, R.string.msg_completed, Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(ActivityLog.this, ex.toString(), Toast.LENGTH_LONG).show();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    /**
+     * JQ add: R.id.menu_log_clear
+     * @param pcap_file
+     */
+    private void clear(final File pcap_file){
+        new AsyncTask<Object, Object, Object>() {
+            @Override
+            protected Object doInBackground(Object... objects) {
+                DatabaseHelper.getInstance(ActivityLog.this).clearLog(-1);
+                if (true) {
+                    ServiceSinkhole.setPcap(false, ActivityLog.this);
+                    if (pcap_file.exists() && !pcap_file.delete())
+                        Log.w(TAG, "Delete PCAP failed");
+                    ServiceSinkhole.setPcap(true, ActivityLog.this);
+                } else {
+                    if (pcap_file.exists() && !pcap_file.delete())
+                        Log.w(TAG, "Delete PCAP failed");
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object result) {
+                if (running)
+                    updateAdapter();
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

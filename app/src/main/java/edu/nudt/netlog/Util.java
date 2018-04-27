@@ -57,6 +57,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.FileInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -83,6 +86,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Util {
     private static final String TAG = "NetLog.Util";
@@ -987,5 +997,115 @@ public class Util {
                 }
         }
         return builder;
+    }
+
+    // JQ Mod: function for directory creating
+    public static void createDirectory(String fileDirPath){
+        String dirPath = fileDirPath;
+        try{
+            File dir = new File(dirPath);
+            if (!dir.exists()){
+                if(dir.mkdir()){
+                    Log.i(TAG,"directory created successfully!");
+                }else{
+                    Log.i(TAG,"directory creation failed.");
+                }
+            }else{
+                Log.i(TAG, "directory has already been created.");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    // JQ Mod, post request
+    /**
+     * 往服务器上上传文本  比如log日志
+     * 192.168.43.137
+     * @param urlstr        请求的url
+     * @param uploadFile    log日志的路径
+     *                                    /mnt/shell/emulated/0/LOG/LOG.log
+     * @param newName        log日志的名字 LOG.log
+     * @return
+     */
+    public static void httpPost(String tag,String urlstr,String uploadFile,String newName) {
+        Log.i(tag, "getEhttpPostt," + "urlstr=" + urlstr + ";uploadFile=" + uploadFile + ";newName=" + newName);
+        String end = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";//边界标识
+        int TIME_OUT = 10 * 1000;   //超时时间
+        HttpURLConnection con = null;
+        DataOutputStream ds = null;
+        InputStream is = null;
+        try {
+            URL url = new URL(urlstr);
+            con = (HttpURLConnection) url.openConnection();
+            con.setReadTimeout(TIME_OUT);
+            con.setConnectTimeout(TIME_OUT);
+            /* 允许Input、Output，不使用Cache */
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setUseCaches(false);
+
+            // 设置http连接属性
+            con.setRequestMethod("POST");//请求方式
+            con.setRequestProperty("Connection", "Keep-Alive");//在一次TCP连接中可以持续发送多份数据而不会断开连接
+            con.setRequestProperty("Charset", "UTF-8");//设置编码
+            con.setRequestProperty("Content-Type",//multipart/form-data能上传文件的编码格式
+                    "multipart/form-data;boundary=" + boundary);
+
+            ds = new DataOutputStream(con.getOutputStream());
+            ds.writeBytes(twoHyphens + boundary + end);
+            ds.writeBytes("Content-Disposition: form-data; "
+                    + "name=\"stblog\";filename=\"" + newName + "\"" + end);
+            ds.writeBytes(end);
+
+            // 取得文件的FileInputStream
+            FileInputStream fStream = new FileInputStream(uploadFile);
+            /* 设置每次写入1024bytes */
+            int bufferSize = 1024;
+            byte[] buffer = new byte[bufferSize];
+            int length = -1;
+            /* 从文件读取数据至缓冲区 */
+            while ((length = fStream.read(buffer)) != -1) {
+                /* 将资料写入DataOutputStream中 */
+                ds.write(buffer, 0, length);
+            }
+            ds.writeBytes(end);
+            ds.writeBytes(twoHyphens + boundary + twoHyphens + end);//结束
+
+            fStream.close();
+            ds.flush();
+            /* 取得Response内容 */
+            is = con.getInputStream();
+            int ch;
+            StringBuffer b = new StringBuffer();
+            while ((ch = is.read()) != -1) {
+                b.append((char) ch);
+            }
+            Log.i(tag, b.toString());
+        } catch (Exception e) {
+            Log.e("UPLOAD", "upload file failed.");
+            e.printStackTrace();
+        } finally {
+            /* 关闭DataOutputStream */
+            if (ds != null) {
+                try {
+                    ds.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (con != null) {
+                con.disconnect();
+            }
+        }
     }
 }

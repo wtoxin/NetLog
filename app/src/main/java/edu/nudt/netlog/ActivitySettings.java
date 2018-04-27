@@ -39,6 +39,9 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Activity for settings
+ */
 public class ActivitySettings extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "NetLog.Settings";
 

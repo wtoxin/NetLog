@@ -24,6 +24,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 
+/**
+ * Used to create list view
+ */
 public class AdapterAccess extends CursorAdapter {
     private int colVersion;
     private int colProtocol;

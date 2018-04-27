@@ -42,9 +42,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+// JQ Mod, for file operation
+import java.io.File;
+
 
 import java.util.List;
 
+/**
+ * Main Activity
+ */
 public class ActivityMain extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "NetLog.Main";
 
@@ -68,6 +74,15 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
     public static final int REQUEST_ROAMING = 4;
 
     private static final int MIN_SDK = Build.VERSION_CODES.LOLLIPOP_MR1;
+
+    /**
+     * @author: JQ
+     * @date: 2018-04-19 16:00:00
+     * Create directory for this App for further data storage
+     * Modifications marked by "JQ Mod"
+     */
+    // JQ Mod: get path
+    private static final String fileDirPath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/";
 
     public static final String ACTION_RULES_CHANGED = "ACTION_RULES_CHANGED";
     public static final String ACTION_QUEUE_CHANGED = "ACTION_QUEUE_CHANGED";
@@ -96,6 +111,10 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        // JQ Mod: call func to create directory
+        Log.i(TAG, "create directory for this app, directory: "+fileDirPath);
+        Util.createDirectory(fileDirPath);
+
         running = true;
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -116,6 +135,10 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
 
         // Title
         getSupportActionBar().setTitle("NetLog");
+
+        // JQ Mod, Timer
+        Intent intent = new Intent(this, TimerService.class);
+        startService(intent);
 
         // On/off switch
         swEnabled.setChecked(enabled);
