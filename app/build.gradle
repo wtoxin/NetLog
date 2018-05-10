@@ -35,38 +35,42 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled = true
-            useProguard = true
+            minifyEnabled = false
+            useProguard = false
             proguardFiles.add(file('proguard-rules.pro'))
         }
         debug {
-            minifyEnabled = true
-            useProguard = true
+            minifyEnabled = false
+            useProguard = false
             proguardFiles.add(file('proguard-rules.pro'))
+        }
+    }
+
+    sourceSets{
+        main{
+            jniLibs.srcDir 'libs'
+            //说明so的路径为该libs路径，关联所有地图SDK的so文件
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     // https://developer.android.com/topic/libraries/support-library/revisions.html
     implementation 'com.android.support:appcompat-v7:27.+'
     implementation 'com.android.support:recyclerview-v7:27.+'
-
     // https://developers.google.com/android/guides/setup
     implementation 'com.google.android.gms:play-services-base:12.0.0'
-
     // https://firebase.google.com/docs/android/setup
-//    implementation 'com.google.firebase:firebase-core:12.0.0'
+    //    implementation 'com.google.firebase:firebase-core:12.0.0'
     implementation 'com.google.firebase:firebase-ads:12.0.0'
-
     // https://bumptech.github.io/glide/
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation files('libs/BaiduLBS_Android.jar')
 }
 
 //apply plugin: 'com.google.gms.google-services'

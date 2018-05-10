@@ -3,11 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="edu.nudt.netlog">
 
+    <!-- GPS定位权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.vending.BILLING" />
@@ -67,6 +72,10 @@
             android:name="android.max_aspect"
             android:value="2.1" />
 
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="IDlGiHgoO0soUiUo7jKUhLXrE4jjmg4v" />
+
         <activity
             android:name="edu.nudt.netlog.ActivityMain"
             android:configChanges="orientation|screenSize"
@@ -111,6 +120,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
+            <!-- AK鉴权 -->
+            <!-- meta-data需要写在application中 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.nudt.netlog.ActivityMain" />
@@ -133,6 +144,14 @@
             <intent-filter>
                 <action android:name="android.net.VpnService" />
             </intent-filter>
+        </service>
+
+        <!-- 声明service组件 -->
+        <!-- 注册自己的服务 -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
         </service>
         <service
             android:name="edu.nudt.netlog.TimerService">

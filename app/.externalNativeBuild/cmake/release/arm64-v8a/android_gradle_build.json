@@ -1,10 +1,10 @@
 
 {
-	"buildFiles" : [ "/Users/wangxin/Desktop/NetLog/app/CMakeLists.txt" ],
+	"buildFiles" : [ "/Users/ainassine/StudioProjects/NetLog/app/CMakeLists.txt" ],
 	"cFileExtensions" : [ "c" ],
 	"cleanCommands" : 
 	[
-		"/Users/wangxin/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a --target clean"
+		"/Users/ainassine/Library/Android/sdk/android-sdk-macosx/cmake/3.6.4111459/bin/cmake --build /Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a --target clean"
 	],
 	"libraries" : 
 	{
@@ -12,81 +12,81 @@
 		{
 			"abi" : "arm64-v8a",
 			"artifactName" : "netguard",
-			"buildCommand" : "/Users/wangxin/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a --target netguard",
+			"buildCommand" : "/Users/ainassine/Library/Android/sdk/android-sdk-macosx/cmake/3.6.4111459/bin/cmake --build /Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a --target netguard",
 			"buildType" : "release",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/netguard.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/netguard.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/session.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/session.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/ip.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/ip.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/tcp.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/tcp.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/udp.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/udp.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/icmp.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/icmp.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/dns.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/dns.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/dhcp.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/dhcp.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/pcap.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/pcap.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				},
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/wangxin/Library/Android/sdk/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
-					"src" : "/Users/wangxin/Desktop/NetLog/app/src/main/jni/netguard/util.c",
-					"workingDirectory" : "/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android --gcc-toolchain=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/aarch64-linux-android-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot -Dnetguard_EXPORTS -I../../../../src/main/jni/netguard  -isystem /Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/sysroot/usr/include/aarch64-linux-android -D__ANDROID_API__=22 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O2 -DNDEBUG  -fPIC      -c ",
+					"src" : "/Users/ainassine/StudioProjects/NetLog/app/src/main/jni/netguard/util.c",
+					"workingDirectory" : "/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/arm64-v8a"
 				}
 			],
-			"output" : "/Users/wangxin/Desktop/NetLog/app/build/intermediates/cmake/release/obj/arm64-v8a/libnetguard.so",
-			"toolchain" : "2666630795405264549"
+			"output" : "/Users/ainassine/StudioProjects/NetLog/app/build/intermediates/cmake/release/obj/arm64-v8a/libnetguard.so",
+			"toolchain" : "4456391866234582857"
 		}
 	},
 	"toolchains" : 
 	{
-		"2666630795405264549" : 
+		"4456391866234582857" : 
 		{
-			"cCompilerExecutable" : "/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
-			"cppCompilerExecutable" : "/Users/wangxin/Library/Android/sdk/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
+			"cCompilerExecutable" : "/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
+			"cppCompilerExecutable" : "/Users/ainassine/Library/Android/sdk/android-sdk-macosx/ndk-bundle/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
 		}
 	}
 }

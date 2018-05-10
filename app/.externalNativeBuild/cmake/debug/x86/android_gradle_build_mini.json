@@ -1,16 +1,16 @@
 {
   "buildFiles": [
-    "/Users/wangxin/Desktop/NetLog/app/CMakeLists.txt"
+    "/Users/ainassine/StudioProjects/NetLog/app/CMakeLists.txt"
   ],
   "cleanCommands": [
-    "/Users/wangxin/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/debug/x86 --target clean"
+    "/Users/ainassine/Library/Android/sdk/android-sdk-macosx/cmake/3.6.4111459/bin/cmake --build /Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/debug/x86 --target clean"
   ],
   "libraries": {
     "netguard-Debug-x86": {
       "artifactName": "netguard",
-      "buildCommand": "/Users/wangxin/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/debug/x86 --target netguard",
+      "buildCommand": "/Users/ainassine/Library/Android/sdk/android-sdk-macosx/cmake/3.6.4111459/bin/cmake --build /Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/debug/x86 --target netguard",
       "abi": "x86",
-      "output": "/Users/wangxin/Desktop/NetLog/app/build/intermediates/cmake/debug/obj/x86/libnetguard.so"
+      "output": "/Users/ainassine/StudioProjects/NetLog/app/build/intermediates/cmake/debug/obj/x86/libnetguard.so"
     }
   }
 }

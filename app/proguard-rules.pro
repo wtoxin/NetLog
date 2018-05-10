@@ -58,3 +58,8 @@
 
 #AdMob
 -dontwarn com.google.android.gms.internal.**
+-dontwarn okio.**
+
+-keep class com.baidu.** {*;}
+-keep class mapsdkvi.com.** {*;}
+-dontwarn com.baidu.**

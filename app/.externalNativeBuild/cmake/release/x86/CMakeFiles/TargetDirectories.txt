@@ -1,3 +1,3 @@
-/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/x86/CMakeFiles/edit_cache.dir
-/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/x86/CMakeFiles/rebuild_cache.dir
-/Users/wangxin/Desktop/NetLog/app/.externalNativeBuild/cmake/release/x86/CMakeFiles/netguard.dir
+/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/x86/CMakeFiles/edit_cache.dir
+/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/x86/CMakeFiles/rebuild_cache.dir
+/Users/ainassine/StudioProjects/NetLog/app/.externalNativeBuild/cmake/release/x86/CMakeFiles/netguard.dir
