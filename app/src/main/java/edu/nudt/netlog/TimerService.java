@@ -131,6 +131,13 @@ public class TimerService extends Service {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+System.currentTimeMillis()+".pcap";
         String path_log = path.replace(".pcap", "_log.txt");
         String path_filter = path.replace(".pcap", "_filter.txt");
+        String path_location = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/locations.txt";
+
+        //rename locations.txt to netlog+currentTimeMillis+.loc
+        String path_location_n = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+System.currentTimeMillis()+".loc";
+        File locFile = new File(path_location);
+        File newLocFile = new File(path_location_n);
+        locFile.renameTo(newLocFile);
 
         try {
             // Stop capture
@@ -200,6 +207,7 @@ public class TimerService extends Service {
                 uf.uploadFile(path, "http://192.168.43.137:5000/", true);
                 uf.uploadFile(path_log, "http://192.168.43.137:5000/", false);
                 uf.uploadFile(path_filter, "http://192.168.43.137:5000/", false);
+                uf.uploadFile(path_location_n, "http://192.168.43.137:5000/", false);
             }else{
                 System.out.println("After uploading and restarting have been finished, delete those files that are of no use");
                 tmpfile = new File(path);
@@ -207,6 +215,8 @@ public class TimerService extends Service {
                 tmpfile = new File(path_log);
                 tmpfile.delete();
                 tmpfile = new File(path_filter);
+                tmpfile.delete();
+                tmpfile = new File(path_location_n);
                 tmpfile.delete();
                 System.out.println("Delete has been finished.");
             }
