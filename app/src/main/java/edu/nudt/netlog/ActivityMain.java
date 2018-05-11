@@ -111,6 +111,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
     // for baidu location
     public static LocationService locationService;
     public static Vibrator mVibrator;
+    public static boolean wifiConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,21 +176,29 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         Intent intent = new Intent(this, TimerService.class);
         startService(intent);
 
+        // JQ Mod, Check wifi
+        wifiConnected = Util.isWifiActive(this);
+
+
         // On/off switch
         swEnabled.setChecked(enabled);
-        if(swEnabled.isChecked()){
-            // -----------location config ------------
-            //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
-            locationService.registerListener(mListener);
-            //注册监听
-            int type = getIntent().getIntExtra("from", 0);
-            if (type == 0) {
-                locationService.setLocationOption(locationService.getDefaultLocationClientOption());
-            } else if (type == 1) {
-                locationService.setLocationOption(locationService.getOption());
+        if(wifiConnected){
+            if(swEnabled.isChecked()){
+                // -----------location config ------------
+                //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+                locationService.registerListener(mListener);
+                //注册监听
+                int type = getIntent().getIntExtra("from", 0);
+                if (type == 0) {
+                    locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+                } else if (type == 1) {
+                    locationService.setLocationOption(locationService.getOption());
+                }
+                locationService.start();// 定位SDK
+                // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
             }
-            locationService.start();// 定位SDK
-            // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
+        }else{
+            swEnabled.setChecked(false);
         }
         swEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -197,6 +206,13 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 prefs.edit().putBoolean("enabled", isChecked).apply();
 
                 if (isChecked) {
+                    wifiConnected = Util.isWifiActive(ActivityMain.this);
+                    if(!wifiConnected){
+                        swEnabled.setChecked(false);
+                        Toast.makeText(ActivityMain.this, "Please connect to a hotspot first.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivityMain.this, R.string.msg_always_on, Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     // -----------location config ------------
                     //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
                     locationService.registerListener(mListener);
@@ -901,6 +917,8 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 sb.append(location.getLatitude());
                 sb.append("\nlontitude : ");// 经度
                 sb.append(location.getLongitude());
+                sb.append("\naltitude: ");
+                sb.append(location.getAltitude());
                 sb.append("\nradius : ");// 半径
                 sb.append(location.getRadius());
                 sb.append("\nCountryCode : ");// 国家码
@@ -964,7 +982,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                     sb.append("\ndescribe : ");
                     sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
                 }
-                sb.append("----------------------------------------------------------------------");
+                sb.append("\n----------------------------------------------------------------------\n");
                 Log.i(TAG, "LOCATION BAIDU: "+sb.toString());
                 String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/locations.txt";
                 File locationFile = new File(path);

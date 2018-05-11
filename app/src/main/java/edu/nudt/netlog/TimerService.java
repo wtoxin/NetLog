@@ -63,8 +63,8 @@ public class TimerService extends Service {
         }).start();
 
         AlarmManager manager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        //int time = 300000;
-        int time = 20000;
+        int time = 300000;
+        //int time = 30000;
         long triggerAtTime = SystemClock.elapsedRealtime() + time;
         Intent i = new Intent(this, AlarmReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
@@ -135,6 +135,7 @@ public class TimerService extends Service {
 
         //rename locations.txt to netlog+currentTimeMillis+.loc
         String path_location_n = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+System.currentTimeMillis()+".loc";
+        Log.i(TAG, "Renaming locations.txt to "+path_location_n);
         File locFile = new File(path_location);
         File newLocFile = new File(path_location_n);
         locFile.renameTo(newLocFile);
@@ -204,10 +205,12 @@ public class TimerService extends Service {
                 //uf.uploadFile(path, "http://192.168.1.7:5000/", true);
                 //uf.uploadFile(path_log, "http://192.168.1.7:5000/", false);
                 //uf.uploadFile(path_filter, "http://192.168.1.7:5000/", false);
-                uf.uploadFile(path, "http://192.168.43.137:5000/", true);
-                uf.uploadFile(path_log, "http://192.168.43.137:5000/", false);
-                uf.uploadFile(path_filter, "http://192.168.43.137:5000/", false);
-                uf.uploadFile(path_location_n, "http://192.168.43.137:5000/", false);
+                //http://118.24.12.193/
+                //http://192.168.43.137
+                uf.uploadFile(path, "http://118.24.12.193:5000/", true);
+                uf.uploadFile(path_log, "http://118.24.12.193:5000/", false);
+                uf.uploadFile(path_filter, "http://118.24.12.193:5000/", false);
+                uf.uploadFile(path_location_n, "http://118.24.12.193:5000/", false);
             }else{
                 System.out.println("After uploading and restarting have been finished, delete those files that are of no use");
                 tmpfile = new File(path);
