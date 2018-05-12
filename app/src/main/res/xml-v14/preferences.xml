@@ -13,6 +13,18 @@
         android:inputType="number"
         android:key="pcap_file_size" />
 
+    <EditTextPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="118.24.12.193"
+        android:inputType="text"
+        android:key="set_server_ip" />
+    <EditTextPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="5000"
+        android:inputType="number"
+        android:key="set_server_port" />
     <PreferenceScreen
         android:key="screen_defaults"
         android:title="@string/setting_defaults">

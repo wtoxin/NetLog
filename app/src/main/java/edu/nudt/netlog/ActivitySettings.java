@@ -89,6 +89,10 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         screen.findPreference("pcap_record_size").setTitle(getString(R.string.setting_pcap_record_size, prefs.getString("pcap_record_size", "65536")));
         screen.findPreference("pcap_file_size").setTitle(getString(R.string.setting_pcap_file_size, prefs.getString("pcap_file_size", "1024")));
 
+        // SERVER parameters
+        screen.findPreference("set_server_ip").setTitle(getString(R.string.setting_server_ip, prefs.getString("set_server_ip","118.24.12.193")));
+        screen.findPreference("set_server_port").setTitle(getString(R.string.setting_server_port, prefs.getString("set_server_port","5000")));
+
 //        // Handle technical info
 //        Preference.OnPreferenceClickListener listener = new Preference.OnPreferenceClickListener() {
 //            @Override
@@ -236,6 +240,43 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
                 ServiceSinkhole.setPcap(true, this);
 
         }
+        else if("set_server_port".equals(name) || "set_server_ip".equals(name)){
+
+            if("set_server_port".equals(name)){
+                String server_port = prefs.getString(name,null);
+                //int port = Integer.parseInt(server_port);
+
+                int port;
+                if(server_port!=null&&server_port.length()<=5)
+                    port = Integer.parseInt(server_port);
+                else
+                    port = 0;
+
+                try{
+                    checkPort(port);
+                }catch (Throwable ex){
+                    prefs.edit().remove(name).apply();
+                    ((EditTextPreference) getPreferenceScreen().findPreference(name)).setText(null);
+                    if (!TextUtils.isEmpty(server_port))
+                        Toast.makeText(ActivitySettings.this, "emmm, port is wrong..", Toast.LENGTH_LONG).show();
+                }
+
+                getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_server_port, prefs.getString(name, "5000")));
+            }
+            else{
+                String server_ip = prefs.getString(name, null);
+                try {
+                    checkAddress(server_ip);
+                } catch (Throwable ex) {
+                    prefs.edit().remove(name).apply();
+                    ((EditTextPreference) getPreferenceScreen().findPreference(name)).setText(null);
+                    if (!TextUtils.isEmpty(server_ip))
+                        Toast.makeText(ActivitySettings.this, ex.toString(), Toast.LENGTH_LONG).show();
+                }
+                getPreferenceScreen().findPreference(name).setTitle(getString(R.string.setting_server_ip, prefs.getString(name, "118.24.12.193")));
+                //ServiceSinkhole.reload("changed " + name, this, false);
+            }
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -284,4 +325,8 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
             throw new IllegalArgumentException("Bad address");
     }
 
+    private void checkPort(int Port) throws IllegalArgumentException, UnknownHostException{
+        if (Port <= 0 || Port > 65535)
+            throw new IllegalArgumentException("Bad port");
+    }
 }

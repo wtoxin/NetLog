@@ -117,6 +117,8 @@ however it is impossible to guarantee NetGuard will work correctly on every devi
     <string name="setting_pcap_record_size">PCAP record size: %s B</string>
     <string name="setting_pcap_file_size">PCAP max. file size: %s MB</string>
     <string name="setting_watchdog">Watchdog: every %s minutes</string>
+    <string name="setting_server_ip">Server IP: %s</string>
+    <string name="setting_server_port">Server port: %s</string>
 
     <string name="setting_stats_category">Speed notification</string>
     <string name="setting_stats">Show speed notification</string>

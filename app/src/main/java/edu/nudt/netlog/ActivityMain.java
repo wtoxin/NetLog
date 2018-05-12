@@ -12,8 +12,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.VpnService;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -53,6 +55,7 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.Poi;
 import com.baidu.mapapi.SDKInitializer;
+import com.facebook.stetho.Stetho;
 
 import java.io.File;
 
@@ -113,6 +116,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
     public static Vibrator mVibrator;
     public static boolean wifiConnected;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "Create version=" + Util.getSelfVersionName(this) + "/" + Util.getSelfVersionCode(this));
@@ -139,6 +143,9 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         locationService = new LocationService(getApplicationContext());
         mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
+
+        //for sqlite check
+        Stetho.initializeWithDefaults(this);
 
 
         //Check permissions for gps

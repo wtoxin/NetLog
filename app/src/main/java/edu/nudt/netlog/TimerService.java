@@ -26,7 +26,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
@@ -36,6 +39,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
+
+import static edu.nudt.netlog.ActivityMain.wifiConnected;
 
 /**
  * @author ainassine
@@ -56,7 +61,7 @@ public class TimerService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d("FUCKING TAG","Time is: " + new Date().toString());
+                Log.d("UPLOADING TAG","Time is: " + new Date().toString());
                 uploadpcap();
                 //getGPSLocation(TimerService.this);
             }
@@ -128,13 +133,14 @@ public class TimerService extends Service {
         OutputStream out3 = null;
         FileInputStream in = null;
         // JQ Mod, modification according to directory change.
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+System.currentTimeMillis()+".pcap";
+        String currentTime = ""+System.currentTimeMillis();
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+currentTime+".pcap";
         String path_log = path.replace(".pcap", "_log.txt");
         String path_filter = path.replace(".pcap", "_filter.txt");
         String path_location = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/locations.txt";
 
         //rename locations.txt to netlog+currentTimeMillis+.loc
-        String path_location_n = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+System.currentTimeMillis()+".loc";
+        String path_location_n = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+currentTime+".loc";
         Log.i(TAG, "Renaming locations.txt to "+path_location_n);
         File locFile = new File(path_location);
         File newLocFile = new File(path_location_n);
@@ -200,17 +206,22 @@ public class TimerService extends Service {
             cleanup();
 
             File tmpfile = new File(path_filter);
-            if (tmpfile.length() != 0 ) {
+            wifiConnected = Util.isWifiActive(this);
+
+            if (tmpfile.length() != 0 && wifiConnected) {
                 uploadFile uf = new uploadFile();
                 //uf.uploadFile(path, "http://192.168.1.7:5000/", true);
                 //uf.uploadFile(path_log, "http://192.168.1.7:5000/", false);
                 //uf.uploadFile(path_filter, "http://192.168.1.7:5000/", false);
                 //http://118.24.12.193/
                 //http://192.168.43.137
-                uf.uploadFile(path, "http://118.24.12.193:5000/", true);
-                uf.uploadFile(path_log, "http://118.24.12.193:5000/", false);
-                uf.uploadFile(path_filter, "http://118.24.12.193:5000/", false);
-                uf.uploadFile(path_location_n, "http://118.24.12.193:5000/", false);
+                String ip = PreferenceManager.getDefaultSharedPreferences(this).getString("set_server_ip", "118.24.12.193");
+                String port = PreferenceManager.getDefaultSharedPreferences(this).getString("set_server_port", "5000");
+                String url = "http://"+ip+":"+port+"/";
+                uf.uploadFile(path, url, true);
+                uf.uploadFile(path_log, url, false);
+                uf.uploadFile(path_filter, url, false);
+                uf.uploadFile(path_location_n, url, false);
             }else{
                 System.out.println("After uploading and restarting have been finished, delete those files that are of no use");
                 tmpfile = new File(path);
