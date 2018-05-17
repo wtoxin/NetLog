@@ -16,7 +16,7 @@
     <EditTextPreference
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:defaultValue="118.24.12.193"
+        android:defaultValue="39.106.16.105"
         android:inputType="text"
         android:key="set_server_ip" />
     <EditTextPreference

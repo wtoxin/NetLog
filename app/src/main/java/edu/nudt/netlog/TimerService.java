@@ -215,7 +215,7 @@ public class TimerService extends Service {
                 //uf.uploadFile(path_filter, "http://192.168.1.7:5000/", false);
                 //http://118.24.12.193/
                 //http://192.168.43.137
-                String ip = PreferenceManager.getDefaultSharedPreferences(this).getString("set_server_ip", "118.24.12.193");
+                String ip = PreferenceManager.getDefaultSharedPreferences(this).getString("set_server_ip", "39.106.16.105");
                 String port = PreferenceManager.getDefaultSharedPreferences(this).getString("set_server_port", "5000");
                 String url = "http://"+ip+":"+port+"/";
                 uf.uploadFile(path, url, true);

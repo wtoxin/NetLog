@@ -85,23 +85,6 @@ public class ActivityLog extends AppCompatActivity implements SharedPreferences.
         setContentView(R.layout.logging);
         running = true;
 
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permissionCheck !=  PackageManager.PERMISSION_GRANTED) {
-//            Toast.makeText(this, "请授予权限", Toast.LENGTH_SHORT).show();
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    0);
-        }
-        permissionCheck = ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (permissionCheck !=  PackageManager.PERMISSION_GRANTED) {
-//            Toast.makeText(this, "请授予权限", Toast.LENGTH_SHORT).show();
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
-                    0);
-        }
-
         // Action bar
         View actionView = getLayoutInflater().inflate(R.layout.actionlog, null, false);
         SwitchCompat swEnabled = actionView.findViewById(R.id.swEnabled);

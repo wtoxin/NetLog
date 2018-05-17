@@ -147,7 +147,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         //for sqlite check
         Stetho.initializeWithDefaults(this);
 
-
+/*
         //Check permissions for gps
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck !=  PackageManager.PERMISSION_GRANTED) {
@@ -156,6 +156,35 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (permissionCheck !=  PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
+
+        // Check writing permission
+        permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck !=  PackageManager.PERMISSION_GRANTED) {
+//            Toast.makeText(this, "请授予权限", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
+        permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionCheck !=  PackageManager.PERMISSION_GRANTED) {
+//            Toast.makeText(this, "请授予权限", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+        }*/
+
+        //Check permissions
+        int permissionCheck1 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int permissionCheck2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int permissionCheck3 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int permissionCheck4 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionCheck1 !=  PackageManager.PERMISSION_GRANTED ||
+                permissionCheck2 != PackageManager.PERMISSION_GRANTED ||
+                permissionCheck3 != PackageManager.PERMISSION_GRANTED ||
+                permissionCheck4 != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            }, 0);
         }
 
         running = true;
