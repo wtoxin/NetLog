@@ -21,6 +21,8 @@ public class LocationService {
     private LocationClientOption mOption,DIYoption;
     private Object  objLock = new Object();
 
+    private NotificationUtils mNotificationUtils;
+    private Notification notification;
     /***
      *
      * @param locationContext
@@ -108,10 +110,38 @@ public class LocationService {
         return DIYoption;
     }
 
-    public void start(){
+    public void start(Context locationContext){
         synchronized (objLock) {
             if(client != null && !client.isStarted()){
                 client.start();
+
+
+                //设置后台定位
+                //android8.0及以上使用NotificationUtils
+                if (Build.VERSION.SDK_INT >= 26) {
+                    mNotificationUtils = new NotificationUtils(locationContext);
+                    Notification.Builder builder2 = mNotificationUtils.getAndroidChannelNotification
+                            ("适配android 8限制后台定位功能", "正在后台定位");
+                    notification = builder2.build();
+                } else {
+                    //获取一个Notification构造器
+                    Notification.Builder builder = new Notification.Builder(locationContext);
+                    Intent nfIntent = new Intent(locationContext, ActivityMain.class);
+
+                    builder.setContentIntent(PendingIntent.
+                            getActivity(locationContext, 0, nfIntent, 0)) // 设置PendingIntent
+                            .setContentTitle("适配android 8限制后台定位功能") // 设置下拉列表里的标题
+                            .setSmallIcon(R.mipmap.ic_launcher)// 设置状态栏内的小图标
+                            .setContentText("正在后台定位") // 设置上下文内容
+                            .setWhen(System.currentTimeMillis()); // 设置该通知发生的时间
+
+                    notification = builder.build(); // 获取构建好的Notification
+                }
+                notification.defaults = Notification.DEFAULT_SOUND; //设置为默认的声音
+
+                client.enableLocInForeground(1, notification);
+
+
             }
         }
     }

@@ -230,7 +230,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 } else if (type == 1) {
                     locationService.setLocationOption(locationService.getOption());
                 }
-                locationService.start();// 定位SDK
+                locationService.start(this);// 定位SDK
                 // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
             }
         }else{
@@ -259,7 +259,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                     } else if (type == 1) {
                         locationService.setLocationOption(locationService.getOption());
                     }
-                    locationService.start();// 定位SDK
+                    locationService.start(ActivityMain.this);// 定位SDK
                     // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
 
 
