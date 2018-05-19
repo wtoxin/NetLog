@@ -29,6 +29,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -38,6 +39,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
+
+import static edu.nudt.netlog.ActivityMain.imei;
 
 /**
  * Activity for settings
@@ -92,6 +95,10 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         // SERVER parameters
         screen.findPreference("set_server_ip").setTitle(getString(R.string.setting_server_ip, prefs.getString("set_server_ip","118.24.12.193")));
         screen.findPreference("set_server_port").setTitle(getString(R.string.setting_server_port, prefs.getString("set_server_port","5000")));
+        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(this.TELEPHONY_SERVICE);
+        screen.findPreference("set_imei").setDefaultValue(imei);
+        screen.findPreference("set_imei").setTitle(getString(R.string.setting_imei, imei));
+
 
 //        // Handle technical info
 //        Preference.OnPreferenceClickListener listener = new Preference.OnPreferenceClickListener() {

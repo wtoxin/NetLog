@@ -119,6 +119,7 @@ however it is impossible to guarantee NetGuard will work correctly on every devi
     <string name="setting_watchdog">Watchdog: every %s minutes</string>
     <string name="setting_server_ip">Server IP: %s</string>
     <string name="setting_server_port">Server port: %s</string>
+    <string name="setting_imei">IMEI: %s</string>
 
     <string name="setting_stats_category">Speed notification</string>
     <string name="setting_stats">Show speed notification</string>

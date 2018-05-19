@@ -25,6 +25,12 @@
         android:defaultValue="5000"
         android:inputType="number"
         android:key="set_server_port" />
+    <EditTextPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="0"
+        android:inputType="number"
+        android:key="set_imei" />
     <PreferenceScreen
         android:key="screen_defaults"
         android:title="@string/setting_defaults">

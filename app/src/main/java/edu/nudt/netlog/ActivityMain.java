@@ -34,6 +34,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -88,6 +89,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
     private static final int REQUEST_INVITE = 2;
     private static final int REQUEST_LOGCAT = 3;
     public static final int REQUEST_ROAMING = 4;
+    public static String imei="";
 
     private static final int MIN_SDK = Build.VERSION_CODES.LOLLIPOP_MR1;
 
@@ -147,6 +149,15 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         //for sqlite check
         Stetho.initializeWithDefaults(this);
 
+        // get imei
+        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(this.TELEPHONY_SERVICE);
+        try{
+            imei = telephonyManager.getDeviceId();
+        }
+        catch (SecurityException e){
+            e.printStackTrace();
+        }
+
 /*
         //Check permissions for gps
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -175,14 +186,18 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         int permissionCheck2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int permissionCheck3 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         int permissionCheck4 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionCheck5 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+
         if (permissionCheck1 !=  PackageManager.PERMISSION_GRANTED ||
                 permissionCheck2 != PackageManager.PERMISSION_GRANTED ||
                 permissionCheck3 != PackageManager.PERMISSION_GRANTED ||
-                permissionCheck4 != PackageManager.PERMISSION_GRANTED) {
+                permissionCheck4 != PackageManager.PERMISSION_GRANTED ||
+                permissionCheck5 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE,
                     Manifest.permission.READ_EXTERNAL_STORAGE
             }, 0);
         }
@@ -939,6 +954,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             Log.d(TAG, "BAIDU DEBUG: "+location.getLocType());
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 StringBuffer sb = new StringBuffer(256);
+                sb.append(imei+"\n");
                 sb.append("time : ");
                 /**
                  * 时间也可以使用systemClock.elapsedRealtime()方法 获取的是自从开机以来，每次回调的时间；
