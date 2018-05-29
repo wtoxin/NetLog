@@ -81,6 +81,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -1107,5 +1108,12 @@ public class Util {
                 con.disconnect();
             }
         }
+    }
+
+    public static String timeMilli2date(long timeMilli){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
+        Date date = new Date(timeMilli);
+
+        return formatter.format(date);
     }
 }

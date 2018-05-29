@@ -228,7 +228,8 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         startService(intent);
 
         // JQ Mod, Check wifi
-        wifiConnected = Util.isWifiActive(this);
+        //wifiConnected = Util.isWifiActive(this);
+        wifiConnected = true;
 
 
         // On/off switch
@@ -257,7 +258,8 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 prefs.edit().putBoolean("enabled", isChecked).apply();
 
                 if (isChecked) {
-                    wifiConnected = Util.isWifiActive(ActivityMain.this);
+                    //wifiConnected = Util.isWifiActive(ActivityMain.this);
+                    wifiConnected = true;
                     if(!wifiConnected){
                         swEnabled.setChecked(false);
                         Toast.makeText(ActivityMain.this, "Please connect to a hotspot first.", Toast.LENGTH_LONG).show();

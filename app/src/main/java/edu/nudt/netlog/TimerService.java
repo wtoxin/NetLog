@@ -133,7 +133,9 @@ public class TimerService extends Service {
         OutputStream out3 = null;
         FileInputStream in = null;
         // JQ Mod, modification according to directory change.
-        String currentTime = ""+System.currentTimeMillis();
+        //String currentTime = ""+System.currentTimeMillis();
+        //System.out.println("TESTTIME"+Util.timeMilli2date(System.currentTimeMillis()));
+        String currentTime = Util.timeMilli2date(System.currentTimeMillis());
         String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+currentTime+".pcap";
         String path_log = path.replace(".pcap", "_log.txt");
         String path_filter = path.replace(".pcap", "_filter.txt");
@@ -206,7 +208,8 @@ public class TimerService extends Service {
             cleanup();
 
             File tmpfile = new File(path_filter);
-            wifiConnected = Util.isWifiActive(this);
+            //wifiConnected = Util.isWifiActive(this);
+            wifiConnected = true;
 
             if (tmpfile.length() != 0 && wifiConnected) {
                 uploadFile uf = new uploadFile();
