@@ -1001,35 +1001,37 @@ public class Util {
     }
 
     // JQ Mod: function for directory creating
-    public static void createDirectory(String fileDirPath){
+    public static void createDirectory(String fileDirPath) {
         String dirPath = fileDirPath;
-        try{
+        try {
             File dir = new File(dirPath);
-            if (!dir.exists()){
-                if(dir.mkdir()){
-                    Log.i(TAG,"directory created successfully!");
-                }else{
-                    Log.i(TAG,"directory creation failed.");
+            if (!dir.exists()) {
+                if (dir.mkdir()) {
+                    Log.i(TAG, "directory created successfully!");
+                } else {
+                    Log.i(TAG, "directory creation failed.");
                 }
-            }else{
+            } else {
                 Log.i(TAG, "directory has already been created.");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     // JQ Mod, post request
+
     /**
      * 往服务器上上传文本  比如log日志
      * 192.168.43.137
-     * @param urlstr        请求的url
-     * @param uploadFile    log日志的路径
-     *                                    /mnt/shell/emulated/0/LOG/LOG.log
-     * @param newName        log日志的名字 LOG.log
+     *
+     * @param urlstr     请求的url
+     * @param uploadFile log日志的路径
+     *                   /mnt/shell/emulated/0/LOG/LOG.log
+     * @param newName    log日志的名字 LOG.log
      * @return
      */
-    public static void httpPost(String tag,String urlstr,String uploadFile,String newName) {
+    public static void httpPost(String tag, String urlstr, String uploadFile, String newName) {
         Log.i(tag, "getEhttpPostt," + "urlstr=" + urlstr + ";uploadFile=" + uploadFile + ";newName=" + newName);
         String end = "\r\n";
         String twoHyphens = "--";
@@ -1110,10 +1112,78 @@ public class Util {
         }
     }
 
-    public static String timeMilli2date(long timeMilli){
+    public static String timeMilli2date(long timeMilli) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
         Date date = new Date(timeMilli);
 
         return formatter.format(date);
     }
+
+    /**
+     * @author JQ
+     * @param context
+     * @date 2018.05.29
+     * @return
+     */
+    public static String getNetworkType2(Context context) {
+        String ret="";
+        String strNetworkType = "";
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                strNetworkType = "WIFI";
+                Log.d("logger", "Network Type : " + strNetworkType);
+                ret+="Network Type: "+strNetworkType+"\n";
+                return ret;
+            } else if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                String _strSubTypeName = networkInfo.getSubtypeName();
+
+                Log.e("logger", "Network getSubtypeName : " + _strSubTypeName);
+                ret+="Network getSubtypeName: "+_strSubTypeName+"\n";
+
+                int networkType = networkInfo.getSubtype();
+                switch (networkType) {
+                    case TelephonyManager.NETWORK_TYPE_GPRS:
+                    case TelephonyManager.NETWORK_TYPE_EDGE:
+                    case TelephonyManager.NETWORK_TYPE_CDMA:
+                    case TelephonyManager.NETWORK_TYPE_1xRTT:
+                    case TelephonyManager.NETWORK_TYPE_IDEN: //api<8 : replace by 11
+                        strNetworkType = "2G";
+                        Log.e("logger", "Network Type : " + strNetworkType);
+                        ret+="Network Type: "+strNetworkType+"\n";
+                        return ret;
+                    case TelephonyManager.NETWORK_TYPE_UMTS:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                    case TelephonyManager.NETWORK_TYPE_HSDPA:
+                    case TelephonyManager.NETWORK_TYPE_HSUPA:
+                    case TelephonyManager.NETWORK_TYPE_HSPA:
+                    case TelephonyManager.NETWORK_TYPE_EVDO_B: //api<9 : replace by 14
+                    case TelephonyManager.NETWORK_TYPE_EHRPD:  //api<11 : replace by 12
+                    case TelephonyManager.NETWORK_TYPE_HSPAP:  //api<13 : replace by 15
+                        strNetworkType = "3G";
+                        break;
+                    case TelephonyManager.NETWORK_TYPE_LTE:    //api<11 : replace by 13
+                        strNetworkType = "4G";
+                        break;
+                    default:
+                        // http://baike.baidu.com/item/TD-SCDMA 中国移动 联通 电信 三种3G制式
+                        if (_strSubTypeName.equalsIgnoreCase("TD-SCDMA") || _strSubTypeName.equalsIgnoreCase("WCDMA") || _strSubTypeName.equalsIgnoreCase("CDMA2000")) {
+                            strNetworkType = "3G";
+                        } else {
+                            strNetworkType = _strSubTypeName;
+                        }
+                        break;
+                }
+                Log.e("logger", "Network getSubtype : " + Integer.valueOf(networkType).toString());
+                //ret+="Network getSubtype : " + Integer.valueOf(networkType).toString() +"\n";
+            }
+        }
+        ret+="Network Type : " + strNetworkType+"\n";
+        Log.e("logger", "Network Type : " + strNetworkType);
+        return ret;
+    }
+
 }

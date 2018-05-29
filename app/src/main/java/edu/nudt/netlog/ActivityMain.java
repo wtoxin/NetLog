@@ -954,6 +954,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         public void onReceiveLocation(BDLocation location) {
             Log.d(TAG, "BAIDU DEBUG: "+location.getAdCode());
             Log.d(TAG, "BAIDU DEBUG: "+location.getLocType());
+
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
                 StringBuffer sb = new StringBuffer(256);
                 sb.append(imei+"\n");
@@ -962,6 +963,12 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                  * 时间也可以使用systemClock.elapsedRealtime()方法 获取的是自从开机以来，每次回调的时间；
                  * location.getTime() 是指服务端出本次结果的时间，如果位置不发生变化，则时间不变
                  */
+
+                String networkType = Util.getNetworkType2(ActivityMain.this);
+                Log.d(TAG, "NETWORKTYPE: "+networkType);
+                sb.append("\nNetworkType: ");
+                sb.append(networkType);
+
                 sb.append(location.getTime());
                 sb.append("\nlocType : ");// 定位类型
                 sb.append(location.getLocType());
