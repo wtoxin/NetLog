@@ -40,8 +40,6 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static edu.nudt.netlog.ActivityMain.imei;
-
 /**
  * Activity for settings
  */
@@ -95,9 +93,10 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         // SERVER parameters
         screen.findPreference("set_server_ip").setTitle(getString(R.string.setting_server_ip, prefs.getString("set_server_ip","118.24.12.193")));
         screen.findPreference("set_server_port").setTitle(getString(R.string.setting_server_port, prefs.getString("set_server_port","5000")));
-        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(this.TELEPHONY_SERVICE);
-        screen.findPreference("set_imei").setDefaultValue(imei);
-        screen.findPreference("set_imei").setTitle(getString(R.string.setting_imei, imei));
+
+        screen.findPreference("set_imei").setTitle(getString(R.string.setting_imei, prefs.getString("set_imei","0")));
+        ((EditTextPreference)screen.findPreference("set_imei")).setText(prefs.getString("set_imei","0"));
+
 
 
 //        // Handle technical info
