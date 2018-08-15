@@ -53,11 +53,13 @@ public class uploadFile {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("ABCDEFG"+response.toString());
+                //System.out.println("ABCDEFG"+response.toString());
+                System.out.println("ABCDEFG"+response.body().string());
                 Log.i("uploadFile","BIG SUCCESS!!!");
                 System.out.println("After uploading and restarting have been finished, delete those files that are of no use");
                 file.delete();
                 System.out.println("Delete has been finished.");
+                //response.body().close();
             }
         });
     }

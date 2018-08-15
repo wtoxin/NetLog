@@ -961,7 +961,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 sb.append(imei+"\n");
                 String networkType = Util.getNetworkType2(ActivityMain.this);
                 Log.d(TAG, "NETWORKTYPE: "+networkType);
-                sb.append("\nNetworkType: ");
+                sb.append("NetworkType: ");
                 sb.append(networkType);
                 sb.append("time : ");
                 /**

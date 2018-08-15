@@ -91,7 +91,7 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         screen.findPreference("pcap_file_size").setTitle(getString(R.string.setting_pcap_file_size, prefs.getString("pcap_file_size", "1024")));
 
         // SERVER parameters
-        screen.findPreference("set_server_ip").setTitle(getString(R.string.setting_server_ip, prefs.getString("set_server_ip","118.24.12.193")));
+        screen.findPreference("set_server_ip").setTitle(getString(R.string.setting_server_ip, prefs.getString("set_server_ip","39.106.16.105")));
         screen.findPreference("set_server_port").setTitle(getString(R.string.setting_server_port, prefs.getString("set_server_port","5000")));
 
         screen.findPreference("set_imei").setTitle(getString(R.string.setting_imei, prefs.getString("set_imei","0")));

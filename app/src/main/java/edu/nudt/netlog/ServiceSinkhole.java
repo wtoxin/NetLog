@@ -187,7 +187,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
     public static void setPcap(boolean enabled, Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        int record_size = 64;
+        int record_size = 65536;
         try {
             String r = prefs.getString("pcap_record_size", null);
             if (TextUtils.isEmpty(r))
