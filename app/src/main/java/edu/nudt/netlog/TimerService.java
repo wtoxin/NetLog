@@ -40,6 +40,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 
+import static edu.nudt.netlog.ActivityMain.imei;
 import static edu.nudt.netlog.ActivityMain.wifiConnected;
 
 /**
@@ -136,6 +137,7 @@ public class TimerService extends Service {
         //String currentTime = ""+System.currentTimeMillis();
         //System.out.println("TESTTIME"+Util.timeMilli2date(System.currentTimeMillis()));
         String currentTime = Util.timeMilli2date(System.currentTimeMillis());
+
         String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/NetLog/netlog"+currentTime+".pcap";
         String path_log = path.replace(".pcap", "_log.txt");
         String path_filter = path.replace(".pcap", "_filter.txt");
@@ -218,15 +220,54 @@ public class TimerService extends Service {
                 //uf.uploadFile(path_filter, "http://192.168.1.7:5000/", false);
                 //http://118.24.12.193/
                 //http://192.168.43.137
+                //创建文件夹，移入待上传的四个文件，执行zip压缩后上传
+                try{
+                    System.out.println("Trying to zip folder < "+path.replace(".pcap",""));
+
+                    //创建Zip包
+                    java.util.zip.ZipOutputStream outZip = new java.util.zip.ZipOutputStream(new java.io.FileOutputStream(path.replace(".pcap",".zip")));
+                    //打开要输出的文件,并压缩
+                    File file = new java.io.File(path);
+                    Util.ZipFiles(file.getParent()+java.io.File.separator, file.getName(), outZip);
+                    file = new java.io.File(path_filter);
+                    Util.ZipFiles(file.getParent()+java.io.File.separator, file.getName(), outZip);
+                    file = new java.io.File(path_log);
+                    Util.ZipFiles(file.getParent()+java.io.File.separator, file.getName(), outZip);
+                    file = new java.io.File(path_location_n);
+                    Util.ZipFiles(file.getParent()+java.io.File.separator, file.getName(), outZip);
+
+                    //完成,关闭
+                    outZip.finish();
+                    outZip.close();
+                    tmpfile = new File(path);
+                    tmpfile.delete();
+                    tmpfile = new File(path_log);
+                    tmpfile.delete();
+                    tmpfile = new File(path_filter);
+                    tmpfile.delete();
+                    tmpfile = new File(path_location_n);
+                    tmpfile.delete();
+                }
+                catch (Exception e){
+                    System.out.println("Zip folder failed!");
+                    e.printStackTrace();
+                }
+
+
                 String ip = PreferenceManager.getDefaultSharedPreferences(this).getString("set_server_ip", "39.106.16.105");
                 String port = PreferenceManager.getDefaultSharedPreferences(this).getString("set_server_port", "5000");
                 String url = "http://"+ip+":"+port+"/";
-                uf.uploadFile(path, url, true);
+                uf.uploadFile(path.replace(".pcap",".zip"),url,true);
+                /*uf.uploadFile(path, url, true);
                 uf.uploadFile(path_log, url, false);
                 uf.uploadFile(path_filter, url, false);
-                uf.uploadFile(path_location_n, url, false);
-            }else{
-                System.out.println("After uploading and restarting have been finished, delete those files that are of no use");
+                uf.uploadFile(path_location_n, url, false);*/
+            }
+            //else if(tmpfile.length() == 0){
+            //    Util.deleteDir(path.replace("/netlog"+currentTime+".pcap",""));
+            //}
+            else if (tmpfile.length() == 0){
+                System.out.println("data to little, delete.");
                 tmpfile = new File(path);
                 tmpfile.delete();
                 tmpfile = new File(path_log);
@@ -234,6 +275,12 @@ public class TimerService extends Service {
                 tmpfile = new File(path_filter);
                 tmpfile.delete();
                 tmpfile = new File(path_location_n);
+                tmpfile.delete();
+                System.out.println("Delete has been finished.");
+            }
+            else{
+                System.out.println("After uploading and restarting have been finished, delete those files that are of no use");
+                tmpfile = new File(path.replace(".pcap",".zip"));
                 tmpfile.delete();
                 System.out.println("Delete has been finished.");
             }

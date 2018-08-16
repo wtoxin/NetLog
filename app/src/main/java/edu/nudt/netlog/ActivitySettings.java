@@ -40,6 +40,8 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static edu.nudt.netlog.ActivityMain.imei;
+
 /**
  * Activity for settings
  */
@@ -74,6 +76,7 @@ public class ActivitySettings extends AppCompatActivity implements SharedPrefere
         super.onPostCreate(savedInstanceState);
         final PreferenceScreen screen = getPreferenceScreen();
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putString("set_imei",imei).commit();
 
 //        // VPN parameters
 //        screen.findPreference("vpn4").setTitle(getString(R.string.setting_vpn4, prefs.getString("vpn4", "10.1.10.1")));

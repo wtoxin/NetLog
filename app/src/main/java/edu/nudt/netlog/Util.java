@@ -1186,4 +1186,99 @@ public class Util {
         return ret;
     }
 
+    /**
+     * 压缩文件,文件夹
+     * @param srcFileString 要压缩的文件/文件夹名字
+     * @param zipFileString 指定压缩的目的和名字
+     * @throws Exception
+     */
+    public static void ZipFolder(String srcFileString, String zipFileString)throws Exception {
+        android.util.Log.v("XZip", "ZipFolder(String, String)");
+
+        //创建Zip包
+        java.util.zip.ZipOutputStream outZip = new java.util.zip.ZipOutputStream(new java.io.FileOutputStream(zipFileString));
+
+        //打开要输出的文件
+        java.io.File file = new java.io.File(srcFileString);
+
+        //压缩
+        ZipFiles(file.getParent()+java.io.File.separator, file.getName(), outZip);
+
+        //完成,关闭
+        outZip.finish();
+        outZip.close();
+
+    }//end of func
+
+    /**
+     * 压缩文件
+     * @param folderString
+     * @param fileString
+     * @param zipOutputSteam
+     * @throws Exception
+     */
+    public static void ZipFiles(String folderString, String fileString, java.util.zip.ZipOutputStream zipOutputSteam)throws Exception{
+        android.util.Log.v("XZip", "ZipFiles(String, String, ZipOutputStream)");
+
+        if(zipOutputSteam == null)
+            return;
+
+        java.io.File file = new java.io.File(folderString+fileString);
+
+        //判断是不是文件
+        if (file.isFile()) {
+
+            java.util.zip.ZipEntry zipEntry =  new java.util.zip.ZipEntry(fileString);
+            java.io.FileInputStream inputStream = new java.io.FileInputStream(file);
+            zipOutputSteam.putNextEntry(zipEntry);
+
+            int len;
+            byte[] buffer = new byte[4096];
+
+            while((len=inputStream.read(buffer)) != -1)
+            {
+                zipOutputSteam.write(buffer, 0, len);
+            }
+
+            zipOutputSteam.closeEntry();
+        }
+        else {
+
+            //文件夹的方式,获取文件夹下的子文件
+            String fileList[] = file.list();
+
+            //如果没有子文件, 则添加进去即可
+            if (fileList.length <= 0) {
+                java.util.zip.ZipEntry zipEntry =  new java.util.zip.ZipEntry(fileString+java.io.File.separator);
+                zipOutputSteam.putNextEntry(zipEntry);
+                zipOutputSteam.closeEntry();
+            }
+
+            //如果有子文件, 遍历子文件
+            for (int i = 0; i < fileList.length; i++) {
+                ZipFiles(folderString, fileString+java.io.File.separator+fileList[i], zipOutputSteam);
+            }//end of for
+
+        }//end of if
+
+    }//end of func
+
+    //删除文件夹和文件夹里面的文件
+    public static void deleteDir(final String pPath) {
+        File dir = new File(pPath);
+        deleteDirWihtFile(dir);
+    }
+
+    public static void deleteDirWihtFile(File dir) {
+        if (dir == null || !dir.exists() || !dir.isDirectory())
+            return;
+        for (File file : dir.listFiles()) {
+            if (file.isFile())
+                file.delete(); // 删除所有文件
+            else if (file.isDirectory())
+                deleteDirWihtFile(file); // 递规的方式删除文件夹
+        }
+        dir.delete();// 删除目录本身
+    }
+
 }

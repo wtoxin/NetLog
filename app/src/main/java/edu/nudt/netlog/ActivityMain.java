@@ -966,7 +966,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                     catch (SecurityException e){
                         e.printStackTrace();
                     }
-                    imei+=1;
+                    imei_count+=1;
                 }
                 //*********************************************
             }
