@@ -968,7 +968,7 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             Log.d(TAG, "BAIDU DEBUG: "+location.getAdCode());
             Log.d(TAG, "BAIDU DEBUG: "+location.getLocType());
 
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+            if (null != location && location.getLocType() != BDLocation.TypeServerError && swEnabled.isChecked()) {
                 StringBuffer sb = new StringBuffer(256);
                 sb.append(imei+"\n");
                 String networkType = Util.getNetworkType2(ActivityMain.this);
