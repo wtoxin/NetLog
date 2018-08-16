@@ -21,3 +21,5 @@
 3	482	0	CMakeFiles/netguard.dir/src/main/jni/netguard/netguard.c.o	1df5b685ce331a7d
 7	554	0	CMakeFiles/netguard.dir/src/main/jni/netguard/tcp.c.o	879a52163c4e64fb
 554	589	0	../../../../build/intermediates/cmake/release/obj/x86/libnetguard.so	9c7e102bab857848
+2	291	0	CMakeFiles/netguard.dir/src/main/jni/netguard/pcap.c.o	5d4f56f6bdf010
+292	364	0	../../../../build/intermediates/cmake/release/obj/x86/libnetguard.so	9c7e102bab857848

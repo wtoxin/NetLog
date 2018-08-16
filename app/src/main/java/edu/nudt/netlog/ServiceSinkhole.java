@@ -191,7 +191,7 @@ public class ServiceSinkhole extends VpnService implements SharedPreferences.OnS
         try {
             String r = prefs.getString("pcap_record_size", null);
             if (TextUtils.isEmpty(r))
-                r = "64";
+                r = "65536";
             record_size = Integer.parseInt(r);
         } catch (Throwable ex) {
             Log.e(TAG, ex.toString() + "\n" + Log.getStackTraceString(ex));
