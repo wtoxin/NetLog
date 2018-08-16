@@ -135,30 +135,10 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        // JQ Mod: call func to create directory
-        Log.i(TAG, "create directory for this app, directory: "+fileDirPath);
-        Util.createDirectory(fileDirPath);
-
-        /*
-         * SET FOR BAIDU API
+        /************************************************************
+         * 权限
          */
-        locationService = new LocationService(getApplicationContext());
-        mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
-        SDKInitializer.initialize(getApplicationContext());
-
-        //for sqlite check
-        Stetho.initializeWithDefaults(this);
-
-        // get imei
-        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(this.TELEPHONY_SERVICE);
-        try{
-            imei = telephonyManager.getDeviceId();
-        }
-        catch (SecurityException e){
-            e.printStackTrace();
-        }
-
-/*
+        /*
         //Check permissions for gps
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionCheck !=  PackageManager.PERMISSION_GRANTED) {
@@ -201,6 +181,21 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                     Manifest.permission.READ_EXTERNAL_STORAGE
             }, 0);
         }
+        //*************************************************************
+
+        // JQ Mod: call func to create directory
+        Log.i(TAG, "create directory for this app, directory: "+fileDirPath);
+        Util.createDirectory(fileDirPath);
+
+        /*
+         * SET FOR BAIDU API
+         */
+        locationService = new LocationService(getApplicationContext());
+        mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+        SDKInitializer.initialize(getApplicationContext());
+
+        //for sqlite check
+        Stetho.initializeWithDefaults(this);
 
         running = true;
 
@@ -257,6 +252,23 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, "Switch=" + isChecked);
                 prefs.edit().putBoolean("enabled", isChecked).apply();
+                /*********************************************
+                get IMEI
+                 */
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+                int imei_count = 0;
+                while(imei.equals("")){
+                    try{
+                        Log.i(TAG, "Trying to get imei");
+                        imei = telephonyManager.getDeviceId();
+                        Log.i(TAG, "IMEI="+imei);
+                    }
+                    catch (SecurityException e){
+                        e.printStackTrace();
+                    }
+                    imei+=1;
+                }
+                //*********************************************
 
                 if (isChecked) {
                     //wifiConnected = Util.isWifiActive(ActivityMain.this);
