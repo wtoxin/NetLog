@@ -252,23 +252,6 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(TAG, "Switch=" + isChecked);
                 prefs.edit().putBoolean("enabled", isChecked).apply();
-                /*********************************************
-                get IMEI
-                 */
-                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-                int imei_count = 0;
-                while(imei.equals("")){
-                    try{
-                        Log.i(TAG, "Trying to get imei");
-                        imei = telephonyManager.getDeviceId();
-                        Log.i(TAG, "IMEI="+imei);
-                    }
-                    catch (SecurityException e){
-                        e.printStackTrace();
-                    }
-                    imei+=1;
-                }
-                //*********************************************
 
                 if (isChecked) {
                     //wifiConnected = Util.isWifiActive(ActivityMain.this);
@@ -968,7 +951,27 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
             Log.d(TAG, "BAIDU DEBUG: "+location.getAdCode());
             Log.d(TAG, "BAIDU DEBUG: "+location.getLocType());
 
-            if (null != location && location.getLocType() != BDLocation.TypeServerError && swEnabled.isChecked()) {
+            if(imei.equals("")){
+                /*********************************************
+                 get IMEI
+                 */
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+                int imei_count = 0;
+                while(imei.equals("")){
+                    try{
+                        Log.i(TAG, "Trying to get imei");
+                        imei = telephonyManager.getDeviceId();
+                        Log.i(TAG, "IMEI="+imei);
+                    }
+                    catch (SecurityException e){
+                        e.printStackTrace();
+                    }
+                    imei+=1;
+                }
+                //*********************************************
+            }
+
+            if (null != location && location.getLocType() != BDLocation.TypeServerError && swEnabled.isChecked()&&!imei.equals("")) {
                 StringBuffer sb = new StringBuffer(256);
                 sb.append(imei+"\n");
                 String networkType = Util.getNetworkType2(ActivityMain.this);
@@ -1066,6 +1069,9 @@ public class ActivityMain extends AppCompatActivity implements SharedPreferences
                 catch (IOException e){
                     e.printStackTrace();
                 }
+            }
+            else{
+                Log.i(TAG,"loc not record because: imei=>"+imei+" switch="+swEnabled.isChecked());
             }
         }
 
